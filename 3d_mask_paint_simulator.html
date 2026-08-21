@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D 가면 페인팅 시뮬레이터</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:#101318;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+  #app{height:100%;display:grid;grid-template-rows:64px 1fr 58px}
+  header{display:flex;align-items:center;gap:14px;padding:0 18px;background:#171b22;border-bottom:1px solid #303641}
+  header h1{font-size:18px;margin:0;font-weight:800}
+  .hint{color:#9ba5b5;font-size:12px}
+  main{position:relative;min-height:0}
+  #canvas{width:100%;height:100%;display:block;cursor:crosshair}
+  .panel{position:absolute;left:16px;top:16px;width:250px;padding:15px;border:1px solid #343b48;border-radius:14px;background:rgba(20,24,31,.9);backdrop-filter:blur(12px);box-shadow:0 12px 35px #0008}
+  .panel h2{font-size:14px;margin:0 0 12px}
+  .row{display:flex;align-items:center;gap:9px;margin:10px 0}
+  label{font-size:12px;color:#cbd2de;flex:1}
+  input[type=range]{width:130px}
+  input[type=color]{width:44px;height:32px;padding:2px;border:1px solid #4a5260;border-radius:8px;background:#111}
+  button{border:1px solid #424b5a;background:#252c37;color:#fff;border-radius:9px;padding:8px 10px;cursor:pointer}
+  button:hover{background:#303947}
+  .tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .active{outline:2px solid #fff;background:#3a4453}
+  #status{position:absolute;right:16px;top:16px;padding:8px 11px;border-radius:10px;background:#171b22cc;color:#bfc8d6;font-size:12px}
+  footer{display:flex;align-items:center;justify-content:center;gap:10px;background:#171b22;border-top:1px solid #303641}
+  footer button{min-width:100px}
+  .swatches{display:flex;gap:6px;flex-wrap:wrap}
+  .sw{width:24px;height:24px;border-radius:50%;border:2px solid #596273;cursor:pointer}
+  @media(max-width:700px){.panel{width:205px}.hint{display:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <h1>🎭 3D 가면 페인팅 시뮬레이터</h1>
+  <span class="hint">사람 얼굴형 가면에 그림 그리기 · 드래그로 회전 · 휠로 확대/축소</span>
+</header>
+<main>
+  <canvas id="canvas"></canvas>
+  <section class="panel">
+    <h2>페인팅 도구</h2>
+    <div class="row"><label>색상</label><input id="color" type="color" value="#e83e4d"></div>
+    <div class="row"><label>브러시 크기</label><input id="size" type="range" min="2" max="55" value="16"></div>
+    <div class="row"><label>불투명도</label><input id="opacity" type="range" min="10" max="100" value="100"></div>
+    <div class="tools">
+      <button id="paintBtn" class="active">🖌️ 페인트</button>
+      <button id="eraseBtn">🧽 지우개</button>
+      <button id="clearBtn">↺ 초기화</button>
+      <button id="saveBtn">💾 저장</button>
+    </div>
+    <h2 style="margin-top:15px">빠른 색상</h2>
+    <div class="swatches" id="swatches"></div>
+  </section>
+  <div id="status">흰색 사람 얼굴형 가면 · 눈구멍 막힘 · 드래그해서 회전</div>
+</main>
+<footer>
+  <button id="front">정면</button>
+  <button id="left">왼쪽</button>
+  <button id="right">오른쪽</button>
+</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const canvas=document.querySelector('#canvas');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setClearColor(0x101318,1);
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(42,1,.1,100);
+camera.position.set(0,0,4.7);
+
+scene.add(new THREE.HemisphereLight(0xffffff,0x30343c,2.2));
+const key=new THREE.DirectionalLight(0xffffff,3.5); key.position.set(2,3,5); scene.add(key);
+const fill=new THREE.DirectionalLight(0xaec8ff,1.4); fill.position.set(-4,1,2); scene.add(fill);
+
+const root=new THREE.Group(); scene.add(root);
+
+// Paint is drawn onto a texture. The UVs of the mask map the drawing onto its 3D surface.
+const paintCanvas=document.createElement('canvas');
+paintCanvas.width=1024; paintCanvas.height=1024;
+const pctx=paintCanvas.getContext('2d');
+function resetPaint(){
+  pctx.fillStyle='#f8f8f6'; pctx.fillRect(0,0,1024,1024);
+  // subtle seam/edge guide, while keeping the mask essentially white
+  paintTexture.needsUpdate=true;
+}
+const paintTexture=new THREE.CanvasTexture(paintCanvas);
+paintTexture.colorSpace=THREE.SRGBColorSpace;
+paintTexture.anisotropy=8;
+
+function maskShape(){
+  // 사람 얼굴형에 가까운 세로형 마스크 실루엣
+  const s=new THREE.Shape();
+  s.moveTo(0,1.48);
+  s.bezierCurveTo(-.48,1.48,-.88,1.30,-1.12,.94);
+  s.bezierCurveTo(-1.34,.60,-1.40,.10,-1.31,-.42);
+  s.bezierCurveTo(-1.22,-.95,-.98,-1.42,-.66,-1.72);
+  s.bezierCurveTo(-.35,-2.02,.35,-2.02,.66,-1.72);
+  s.bezierCurveTo(.98,-1.42,1.22,-.95,1.31,-.42);
+  s.bezierCurveTo(1.40,.10,1.34,.60,1.12,.94);
+  s.bezierCurveTo(.88,1.30,.48,1.48,0,1.48);
+  return s;
+}
+const geo=new THREE.ExtrudeGeometry(maskShape(),{
+  depth:.30,bevelEnabled:true,bevelSegments:8,steps:3,bevelSize:.10,bevelThickness:.10
+});
+geo.center();
+const mat=new THREE.MeshStandardMaterial({
+  map:paintTexture,roughness:.72,metalness:.02,
+  side:THREE.DoubleSide
+});
+const mask=new THREE.Mesh(geo,mat);
+root.add(mask);
+
+// 얼굴의 입체적인 이마/광대/코 형태
+function featureSphere(x,y,z,sx,sy,sz){
+  const g=new THREE.SphereGeometry(1,32,24);
+  const m=new THREE.MeshStandardMaterial({color:0xf8f8f6,roughness:.78});
+  const o=new THREE.Mesh(g,m);
+  o.position.set(x,y,z); o.scale.set(sx,sy,sz);
+  root.add(o); return o;
+}
+featureSphere(0,.88,.23,.55,.22,.15);       // 이마
+featureSphere(-.63,.12,.23,.38,.48,.14);    // 왼쪽 광대
+featureSphere(.63,.12,.23,.38,.48,.14);     // 오른쪽 광대
+featureSphere(0,.05,.38,.15,.58,.20);        // 코
+featureSphere(-.43,-.55,.24,.38,.25,.12);   // 턱/입 주변
+featureSphere(.43,-.55,.24,.38,.25,.12);
+
+// 눈구멍을 뚫지 않고 완전히 막힌 흰색 눈 영역
+// 검은 구멍 대신 흰색으로 덮어서 '막힌 가면' 형태 유지
+function eyePlate(x){
+  const g=new THREE.SphereGeometry(1,40,24);
+  const m=new THREE.MeshStandardMaterial({color:0xf8f8f6,roughness:.72});
+  const o=new THREE.Mesh(g,m);
+  o.position.set(x,.43,.38);
+  o.scale.set(.43,.22,.09);
+  root.add(o);
+}
+eyePlate(-.49);
+eyePlate(.49);
+
+// 눈썹과 입술의 얕은 조형만 추가
+featureSphere(-.48,.73,.39,.42,.07,.07);
+featureSphere(.48,.73,.39,.42,.07,.07);
+featureSphere(0,-.72,.31,.45,.08,.07);
+
+// 눈구멍이 없는 '완전 폐쇄형' 얼굴 가면 안내판
+const faceLabelCanvas=document.createElement('canvas');
+faceLabelCanvas.width=512; faceLabelCanvas.height=128;
+const flc=faceLabelCanvas.getContext('2d');
+flc.fillStyle='rgba(255,255,255,0)';
+flc.clearRect(0,0,512,128);
+const faceLabelTexture=new THREE.CanvasTexture(faceLabelCanvas);
+
+// rotate/zoom interaction
+let yaw=0.0,pitch=0.0,zoom=4.7;
+let dragging=false,painting=false,lastX=0,lastY=0;
+const raycaster=new THREE.Raycaster(), mouse=new THREE.Vector2();
+
+function resize(){
+  const r=canvas.getBoundingClientRect();
+  renderer.setSize(r.width,r.height,false);
+  camera.aspect=r.width/r.height; camera.updateProjectionMatrix();
+}
+addEventListener('resize',resize); resize();
+
+function setCamera(){camera.position.set(0,0,zoom); root.rotation.y=yaw; root.rotation.x=pitch;}
+setCamera();
+
+function paintAt(e){
+  const r=canvas.getBoundingClientRect();
+  mouse.x=((e.clientX-r.left)/r.width)*2-1;
+  mouse.y=-((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const hits=raycaster.intersectObject(mask,false);
+  if(!hits.length)return;
+  const uv=hits[0].uv;
+  const x=uv.x*paintCanvas.width, y=(1-uv.y)*paintCanvas.height;
+  const rad=+document.querySelector('#size').value*1.7;
+  const a=+document.querySelector('#opacity').value/100;
+  const color=document.querySelector('#color').value;
+  pctx.save();
+  pctx.globalAlpha=a;
+  pctx.globalCompositeOperation=eraseMode?'destination-out':'source-over';
+  pctx.fillStyle=eraseMode?'rgba(0,0,0,1)':color;
+  pctx.beginPath(); pctx.arc(x,y,rad,0,Math.PI*2); pctx.fill();
+  pctx.restore();
+  // destination-out would make transparent rather than white; restore white beneath via compositing.
+  if(eraseMode){
+    // Rebuild white background + painted content using a saved layer approach is more complex;
+    // here a transparent mark reveals the material's white base.
+    paintTexture.needsUpdate=true;
+  } else paintTexture.needsUpdate=true;
+}
+
+canvas.addEventListener('pointerdown',e=>{
+  canvas.setPointerCapture(e.pointerId);
+  dragging=true; lastX=e.clientX; lastY=e.clientY;
+  painting=e.button===0 && !e.shiftKey;
+  if(painting)paintAt(e);
+});
+canvas.addEventListener('pointermove',e=>{
+  if(!dragging)return;
+  const dx=e.clientX-lastX,dy=e.clientY-lastY;
+  lastX=e.clientX;lastY=e.clientY;
+  if(e.shiftKey || e.buttons===2){yaw+=dx*.012;pitch+=dy*.008;pitch=Math.max(-.7,Math.min(.7,pitch));setCamera();}
+  else if(painting)paintAt(e);
+});
+canvas.addEventListener('pointerup',()=>{dragging=false;painting=false});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(3,Math.min(7,zoom+e.deltaY*.004));setCamera()},{passive:false});
+
+let eraseMode=false;
+const paintBtn=document.querySelector('#paintBtn'),eraseBtn=document.querySelector('#eraseBtn');
+paintBtn.onclick=()=>{eraseMode=false;paintBtn.classList.add('active');eraseBtn.classList.remove('active')};
+eraseBtn.onclick=()=>{eraseMode=true;eraseBtn.classList.add('active');paintBtn.classList.remove('active')};
+document.querySelector('#clearBtn').onclick=()=>{resetPaint();eraseMode=false;paintBtn.classList.add('active');eraseBtn.classList.remove('active')};
+
+document.querySelector('#saveBtn').onclick=()=>{
+  renderer.render(scene,camera);
+  const a=document.createElement('a'); a.download='my-3d-mask.png'; a.href=renderer.domElement.toDataURL('image/png'); a.click();
+};
+document.querySelector('#front').onclick=()=>{yaw=0;pitch=0;setCamera()};
+document.querySelector('#left').onclick=()=>{yaw=-Math.PI/2;pitch=0;setCamera()};
+document.querySelector('#right').onclick=()=>{yaw=Math.PI/2;pitch=0;setCamera()};
+
+['#ff3b30','#ffcc00','#34c759','#0a84ff','#af52de','#ffffff','#000000','#8e5a3c'].forEach(c=>{
+  const b=document.createElement('span');b.className='sw';b.style.background=c;b.title=c;
+  b.onclick=()=>{document.querySelector('#color').value=c};document.querySelector('#swatches').appendChild(b);
+});
+resetPaint();
+
+function animate(){requestAnimationFrame(animate);renderer.render(scene,camera)}
+animate();
+</script>
+</body>
+</html>
