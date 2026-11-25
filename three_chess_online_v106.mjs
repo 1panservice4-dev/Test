@@ -1,0 +1,29 @@
+import assert from 'node:assert/strict';import {spawn} from 'node:child_process';import {setTimeout as pause} from 'node:timers/promises';import {fileURLToPath} from 'node:url';import path from 'node:path';import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url),E=require('../three_chess_engine.js');const cwd=path.dirname(path.dirname(fileURLToPath(import.meta.url)));const port=17896;
+const child=spawn(process.execPath,['server.js'],{cwd,env:{...process.env,PORT:String(port)},stdio:['ignore','pipe','pipe']});let logs='';child.stdout.on('data',b=>logs+=b.toString());child.stderr.on('data',b=>logs+=b.toString());let sockets=[];
+async function boot(){for(let i=0;i<80;i++){try{const r=await fetch(`http://127.0.0.1:${port}/health`);if(r.ok)return;}catch{}await pause(80);}throw Error('server failed '+logs);}
+async function conn(){const ws=new WebSocket(`ws://127.0.0.1:${port}/three-chess-ws`),q=[],pending=[];ws.addEventListener('message',ev=>{const m=JSON.parse(String(ev.data));q.push(m);for(const cb of pending.slice())cb();});await new Promise((ok,no)=>{ws.addEventListener('open',ok,{once:true});ws.addEventListener('error',no,{once:true});});
+ const o={ws,q,send(m){ws.send(JSON.stringify(m))},wait(type,pred=()=>true,time=4500){return new Promise((ok,no)=>{let done=false;const stop=setTimeout(()=>{if(!done){done=true;pending.splice(pending.indexOf(check),1);no(Error('timeout '+type+' recent '+q.slice(-10).map(x=>x.type).join(','))) }},time);const check=()=>{if(done)return;const i=q.findIndex(m=>m.type===type&&pred(m));if(i<0)return;done=true;clearTimeout(stop);pending.splice(pending.indexOf(check),1);ok(q.splice(i,1)[0]);};pending.push(check);check();});}};sockets.push(o);return o;}
+async function run(){await boot();const html=await fetch(`http://127.0.0.1:${port}/three_chess.html?mode=online`);assert.equal(html.status,200);assert.match(await html.text(),/THREE KINGDOM CHESS/);const js=await fetch(`http://127.0.0.1:${port}/three_chess_engine.js`);assert.equal(js.status,200);assert.match(await js.text(),/three-arm chess/);const home=await (await fetch(`http://127.0.0.1:${port}/`)).text();assert(home.includes('quickStage7'));
+ const [w,b,r]=await Promise.all([conn(),conn(),conn()]);await Promise.all([w.wait('tri_rooms'),b.wait('tri_rooms'),r.wait('tri_rooms')]);
+ w.send({type:'tri_create',name:'공개방 3인 대결',nickname:'화이트'});const wjoin=await w.wait('tri_joined');assert.equal(wjoin.color,'w');await w.wait('tri_state',m=>m.status==='waiting'&&m.players.length===1);
+ b.send({type:'tri_join',roomId:wjoin.roomId,nickname:'블랙'});const bjoin=await b.wait('tri_joined');assert.equal(bjoin.color,'b');await b.wait('tri_state',m=>m.status==='waiting'&&m.players.length===2);
+ r.send({type:'tri_join',roomId:wjoin.roomId,nickname:'레드'});const rjoin=await r.wait('tri_joined');assert.equal(rjoin.color,'r');
+ const start=await Promise.all([w.wait('tri_state',m=>m.status==='playing'),b.wait('tri_state',m=>m.status==='playing'),r.wait('tri_state',m=>m.status==='playing')]);start.forEach(s=>{assert.equal(s.position.t,'w');assert.equal(s.players.length,3);assert.equal(s.position.b.filter(Boolean).length,48);});
+ console.log('PASS Stage7 public room with 3 colours, 96 tiles, 48 pieces, synchronized start');
+ b.send({type:'tri_move',seq:0,f:E.at(4,6),t:E.at(4,5)});assert.match((await b.wait('tri_error')).message,/차례/);
+ w.send({type:'tri_move',seq:0,f:E.at(4,1),t:E.at(4,2)});let states=await Promise.all([w.wait('tri_state',m=>m.seq===1),b.wait('tri_state',m=>m.seq===1),r.wait('tri_state',m=>m.seq===1)]);assert(states.every(x=>x.position.t==='b'));
+ b.send({type:'tri_move',seq:1,f:E.at(4,6),t:E.at(4,5)});states=await Promise.all([w.wait('tri_state',m=>m.seq===2),b.wait('tri_state',m=>m.seq===2),r.wait('tri_state',m=>m.seq===2)]);assert(states.every(x=>x.position.t==='r'));
+ r.send({type:'tri_move',seq:2,f:E.at(10,4),t:E.at(9,4)});states=await Promise.all([w.wait('tri_state',m=>m.seq===3),b.wait('tri_state',m=>m.seq===3),r.wait('tri_state',m=>m.seq===3)]);assert(states.every(x=>x.position.t==='w'));
+ console.log('PASS white → black → red → white, invalid out-of-turn rejected, three clients agree');
+ // Tick rate should be close to 60Hz locally, not a fixed Internet guarantee.
+ w.q.length=0;await pause(1000);const count=w.q.filter(m=>m.type==='tri_tick').length;assert(count>=44&&count<=70,'ticks '+count);console.log('PASS Stage7 compact network clock '+count+' packets / second');
+ b.ws.close();await w.wait('tri_state',m=>m.players.some(p=>p.color==='b'&&!p.connected));
+ const bb=await conn();await bb.wait('tri_rooms');bb.send({type:'tri_resume',token:bjoin.token});const resumed=await bb.wait('tri_joined');assert.equal(resumed.color,'b');const saved=await bb.wait('tri_state',m=>m.seq===3);assert.equal(saved.position.t,'w');console.log('PASS disconnected black seat resumes with same 3-move state');
+ // Eliminating two players leaves one winner; remaining players see identical result.
+ r.send({type:'tri_resign'});await Promise.all([w.wait('tri_state',m=>!m.position.alive.r),bb.wait('tri_state',m=>!m.position.alive.r)]);
+ bb.send({type:'tri_resign'});const done=await w.wait('tri_state',m=>m.position.status==='ended');assert.equal(done.position.winner,'w');console.log('PASS resignations eliminate kings and white wins when sole survivor');
+ w.send({type:'tri_rematch'});bb.send({type:'tri_rematch'});const after=await w.wait('tri_state',m=>m.position.status==='ended'&&m.players.some(x=>x.rematch));assert(after.players.some(x=>x.rematch));
+ const health=await(await fetch(`http://127.0.0.1:${port}/health`)).json();assert.equal(health.version,'10.6.0');console.log('PASS old route preserved, health 10.6');
+}
+try{await run()}finally{for(const o of sockets){try{o.ws.close()}catch{}}child.kill('SIGTERM');await pause(150);}

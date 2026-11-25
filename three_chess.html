@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#070d19"><title>Stage 07 · THREE KINGDOM CHESS</title>
+<style>
+:root{color-scheme:dark;--bg:#070d19;--card:#111d33;--line:#344461;--text:#eff6ff;--muted:#9bb0cb;--gold:#e9c783;--green:#a5d1a2;--red:#ff6d8b}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(circle at 14% -6%,#244273 0,transparent 37%),radial-gradient(circle at 96% 78%,#433356 0,transparent 42%),#070d19;color:var(--text);font:15px/1.55 system-ui,-apple-system,'Segoe UI',sans-serif}button,input{font:inherit}button{border:1px solid #506080;border-radius:11px;background:#213957;color:#fff;padding:10px 15px;cursor:pointer;font-weight:750}button:hover:not(:disabled){filter:brightness(1.13)}button:disabled{opacity:.36;cursor:default}button:focus-visible,input:focus-visible{outline:2px solid #f6c765;outline-offset:2px}.primary{background:linear-gradient(110deg,#2966cb,#874bba);border-color:#8d9eea}.danger{background:#633045}.ghost{background:#142238}.small{font-size:12px;padding:8px 11px}.hidden{display:none!important}a{color:#b4d9ff;text-decoration:none}a:hover{text-decoration:underline}#root{max-width:1350px;margin:auto;padding:18px 18px 32px}header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:13px 17px;border:1px solid #425878;border-radius:20px;background:#101d35c9;margin-bottom:15px}.brand{font-weight:1000;letter-spacing:.12em;font-size:12px;color:#bcd5fb}.brand b{display:block;letter-spacing:-.04em;font-size:clamp(21px,3vw,34px);color:white}.toplinks{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.pill{display:inline-flex;align-items:center;border:1px solid #435779;background:#0e1d33;border-radius:100px;padding:7px 11px;font-size:12px;color:#c7d7ec}.page{animation:enter .22s ease}@keyframes enter{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:none}}.hero{padding:30px 27px;border:1px solid #526485;background:linear-gradient(125deg,#1c3a5f,#27234b 90%);border-radius:25px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(170px,.7fr);gap:22px;align-items:center}.kicker{font-size:12px;font-weight:900;letter-spacing:.14em;color:#e9ca8c}.hero h1{font-size:clamp(30px,4.9vw,54px);line-height:1.1;letter-spacing:-.055em;margin:9px 0 12px}.hero p{color:#c9d8ea;max-width:730px}.hero-art{display:flex;justify-content:center;font-size:clamp(80px,12vw,165px);text-shadow:0 15px 45px #0008}.buttonline{display:flex;flex-wrap:wrap;gap:11px;margin-top:20px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.panel{padding:19px;background:#101e34e8;border:1px solid #394b69;border-radius:19px}.panel h2{font-size:18px;margin:0 0 8px}.panel p{font-size:13px;color:var(--muted);margin:0 0 10px}.panel ul{margin:7px 0;padding-left:21px;color:#b7c9e1;font-size:13px;line-height:1.9}.field{display:flex;flex-direction:column;gap:5px;margin:12px 0 10px}.field label{font-size:12px;color:#c8d5ed;font-weight:700}.field input{width:100%;border:1px solid #4d6280;background:#0c192b;border-radius:10px;color:#fff;padding:11px}.rooms{display:grid;gap:9px;max-height:340px;overflow:auto}.room{display:flex;gap:15px;align-items:center;justify-content:space-between;background:#172941;border:1px solid #4a6178;border-radius:13px;padding:12px}.room small{display:block;color:#a9bad1}.muted{color:var(--muted)}.game-layout{display:grid;grid-template-columns:minmax(430px,840px) minmax(265px,380px);align-items:start;gap:17px}.board-pane{background:#101b30;border:1px solid #455977;border-radius:19px;padding:12px}.board-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:4px 4px 10px}.board-top h2{margin:0;font-size:17px}.board-frame{position:relative;isolation:isolate;background:#080e14;border:2px solid #3a536b;border-radius:12px;overflow:hidden}#chessboard{display:block;width:100%;aspect-ratio:1220/944;touch-action:manipulation;user-select:none;-webkit-user-select:none}#chessboard [data-cell]{cursor:pointer;transition:filter .08s}#chessboard [data-cell]:hover{filter:brightness(1.18)}.overlay{position:absolute;inset:10%;z-index:4;display:flex;align-items:center;justify-content:center;background:#061323d9;border:1px solid #6581ab;border-radius:16px;backdrop-filter:blur(8px);text-align:center;padding:20px}.overlay h2{font-size:26px}.overlay p{color:#cbd9ea}.team-list{display:grid;gap:8px}.team{padding:10px 11px;border:1px solid #445474;background:#112036;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}.team.active{border-color:#f5d38f;box-shadow:inset 0 0 0 1px #f5d38f99}.team.dead{opacity:.72}.team.dead .team-meta{color:#d2d5df}.symbol{display:inline-block;width:15px;height:15px;vertical-align:middle;border-radius:50%;margin-right:7px;border:2px solid #111}.symbol.w{background:#f7f6f2}.symbol.b{background:#090e19;border-color:#9da7b6}.symbol.r{background:#e74e70}.team-meta{font-size:12px;color:#a7b8cc}.log{max-height:185px;overflow:auto;display:flex;flex-direction:column;gap:5px}.log div{background:#142640;border-radius:8px;padding:5px 8px;font-size:12px}.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.legend span{border:1px solid #34455e;border-radius:8px;padding:7px 5px;font-size:11px;text-align:center}.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stats>div{padding:9px;background:#172a42;border-radius:10px}.stats b{display:block;font-size:21px;font-variant-numeric:tabular-nums}.stats small{color:#93adc9}.notice{font-size:13px;color:#cad9ee;margin-top:10px;min-height:24px}.outcome{border:1px solid #6884b1;background:linear-gradient(110deg,#183755,#2c2756);border-radius:12px;padding:14px}.outcome strong{font-size:20px}#promotionModal{position:fixed;inset:0;background:#050b15d8;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}.promo-box{border:1px solid #7185a7;background:#142745;border-radius:19px;padding:21px;max-width:440px;width:100%}.promo-btn{font-size:23px;min-width:65px}.note{color:#aabfdb;font-size:12px}.badge{background:#203658;border-radius:8px;border:1px solid #4a638b;padding:4px 7px;font-size:11px}.divider{height:1px;background:#394c66;margin:15px 0}#returnGame{position:fixed;right:14px;bottom:15px;border-radius:50px;box-shadow:0 4px 24px #0008}@media(max-width:980px){.game-layout{grid-template-columns:1fr}.game-layout>.panel{width:100%}.hero{grid-template-columns:1fr}.hero-art{display:none}}@media(max-width:620px){#root{padding:8px}header{border-radius:13px} .game-layout{display:block}.board-pane{padding:5px}.board-top{padding:5px}.cols{grid-template-columns:1fr}.panel{padding:13px;margin-top:12px}.hero{padding:22px 17px}.room{font-size:12px} .team-list{gap:5px}}
+.color-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}.color-card{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:164px;padding:20px 10px;border:2px solid #516787;background:#1a2943;border-radius:18px}.color-card small{color:#abc0da}.color-card.taken{background:#1b273a;opacity:.35;cursor:default}.color-card.selected{border-color:#f0cb81;box-shadow:0 0 0 2px #e7bc6960;background:#30425e}.color-piece{font-size:61px;line-height:1.1}.color-piece.white{color:#fffcf0;text-shadow:0 2px #263146}.color-piece.black{color:#090d17;-webkit-text-stroke:1px #eef1e6}.color-piece.red{color:#e94c68;-webkit-text-stroke:1px #141927}.selection-status{min-height:25px;font-weight:700;color:#d6e3f8}.choice-players{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.choice-players span{background:#1d304c;border:1px solid #405978;border-radius:8px;padding:7px 10px;font-size:12px}@media(max-width:590px){.color-cards{gap:6px}.color-card{min-height:128px;padding:12px 4px;font-size:12px}.color-piece{font-size:43px}}
+</style></head><body><div id="root">
+<header><div class="brand">TRICKY TOWER DUEL <b>♔ THREE KINGDOM CHESS <span style="color:var(--gold)">· STAGE 07</span></b></div><div class="toplinks"><span class="pill" id="networkPill">로컬 · 대기</span><a class="pill" href="/index.html">⌂ 메인 로비</a></div></header>
+<section id="entry" class="page"><div class="hero"><div><div class="kicker">96 SQUARES · THREE PLAYERS · ONE KING REMAINS</div><h1>세 왕국의<br>마지막 왕을 가려라.</h1><p>그림처럼 중앙에서 이동 방향이 바뀌는 96칸 3인 체스. 백 → 흑 → 빨강 순서, 체크 탈출·체크메이트 탈락·스테일메이트 처리까지 적용한 별도 규칙 엔진이야.</p><div class="buttonline"><button class="primary" id="localBtn">한 컴퓨터에서 3인 플레이</button><button id="onlineBtn">🌐 3인 공개방 멀티</button></div></div><div class="hero-art">♔<span style="color:#ea6584">♚</span>♚</div></div>
+<div class="cols"><div class="panel"><h2>게임 규칙</h2><ul><li>백 → 흑 → 빨강 순서로 한 수씩 진행</li><li>체크를 받으면 반드시 체크를 피하는 수를 선택</li><li>체크메이트면 탈락, 살아 있는 왕이 하나일 때 승리</li><li>3명 중 스테일메이트 발생 시 그 차례를 건너뜀</li><li>2명만 남은 상태의 스테일메이트는 무승부</li><li>중앙 대각선에서는 같은 색 칸을 따르는 분기 경로 선택 가능</li></ul></div><div class="panel"><h2>조작 및 성능</h2><p>각자 진영을 선택하면 해당 진영이 화면 아래에 보여. 기물을 클릭하면 이동할 수 있는 칸을 표시해. 이동할 칸을 다시 클릭하면 서버가 합법성을 확인해.</p><div class="stats"><div><b>60</b><small>FPS 목표</small></div><div><b>60</b><small>Hz 목표</small></div><div><b>30s</b><small>재접속 유예</small></div></div><p style="margin-top:15px">체스판은 수가 바뀔 때만 새로 그리므로 연결 신호가 초당 60번 와도 화면 전체를 계속 다시 그리지 않아.</p></div></div></section>
+<section id="lobby" class="page hidden"><div class="panel"><h2>3인 체스 · 코드 없는 공개방</h2><p>한 방에 최대 3명. 입장한 세 사람이 <strong>백·흑·빨강</strong> 중 하나씩 중복 없이 직접 선택해. 세 명 모두 진영을 선택한 뒤 경기가 시작돼.</p><div class="cols"><div><div class="field"><label for="nickname">닉네임</label><input id="nickname" maxlength="18" value="플레이어"></div><div class="field"><label for="roomname">공개방 이름</label><input id="roomname" maxlength="24" value="3인 체스 공개 대전"></div><div class="buttonline"><button id="createBtn" class="primary">새 공개방 만들기</button><button id="refreshBtn">↻ 새로고침</button><button id="lobbyBack">뒤로 가기</button></div><p class="note" id="lobbyInfo">서버 연결 중...</p></div><div><h2>입장 가능한 공개방</h2><div id="rooms" class="rooms"><p class="muted">공개방을 불러오는 중...</p></div></div></div></div></section>
+<section id="picking" class="page hidden"><div class="panel color-selection">
+  <div class="kicker">STAGE 07 · YOUR FACTION</div><h2 style="font-size:26px;margin:8px 0 8px">플레이할 체스 진영을 선택해</h2>
+  <p>백·흑·빨강 중 한 가지를 직접 선택해. 먼저 선택된 색은 다른 사람이 사용할 수 없어. <strong>세 명 모두 선택해야 체스판과 경기가 열려.</strong></p>
+  <div class="color-cards" id="colorCards">
+    <button class="color-card" id="choose_w" data-team="w"><span class="color-piece white">♔</span><strong>백 WHITE</strong><small>내 진영을 아래로</small></button>
+    <button class="color-card" id="choose_b" data-team="b"><span class="color-piece black">♚</span><strong>흑 BLACK</strong><small>내 진영을 아래로</small></button>
+    <button class="color-card" id="choose_r" data-team="r"><span class="color-piece red">♚</span><strong>빨강 RED</strong><small>내 진영을 아래로</small></button>
+  </div>
+  <p class="selection-status" id="choiceStatus" role="status">색상 선택을 기다리고 있어.</p>
+  <div id="choicePlayers" class="choice-players"></div>
+  <div class="buttonline"><button id="choiceBack" class="ghost">← 나가기</button></div>
+</div></section>
+<section id="playing" class="page hidden"><div class="game-layout"><div class="board-pane"><div class="board-top"><h2 id="turnText">백의 차례 · 게임 준비 중</h2><div class="bar"><span class="badge" id="roomInfo">로컬 3인</span><button class="small" id="backBtn">← 로비</button></div></div><div class="board-frame"><svg id="chessboard" viewBox="0 0 1220 944" role="img" aria-label="96칸 3인용 체스판"></svg><div id="waitOverlay" class="overlay hidden"><div><h2>3명을 기다리는 중</h2><p id="waitText">참가자를 기다리고 있어.</p></div></div></div><p class="notice" id="gameInfo">기물을 클릭해서 이동할 수 있는 칸을 선택해.</p></div><div><div class="panel"><h2>왕국 상태</h2><div class="team-list" id="teams"></div><div class="divider"></div><div class="stats"><div><b id="fps">—</b><small>화면 FPS</small></div><div><b id="hz">—</b><small>수신 Hz</small></div><div><b id="rtt">—</b><small>RTT (ms)</small></div></div><p class="note" style="margin-top:9px" id="linkInfo">서버가 각 수와 승패를 검증해.</p></div><div class="panel"><h2>이동 기록</h2><div id="moveLog" class="log"><div>게임 시작 전</div></div><div class="divider"></div><div class="bar"><button class="danger" id="resignBtn">기권</button><button id="rematchBtn" class="hidden">재대결 투표</button><button class="small" id="resetBtn">로컬 새 게임</button></div><p id="result" class="notice"></p></div><div class="panel"><h2>보드 중앙 규칙</h2><p>기물의 대각선은 같은 색을 유지하며 중앙 경계에서 갈라질 수 있어. 룩·퀸은 직선을 따라 진행하고, 나이트는 1+2칸 이동 및 중앙부 추가 경로를 사용해.</p><div class="legend"><span>♔ 백</span><span>♚ 흑</span><span style="color:#fa8498">♚ 빨강</span></div><p class="note" style="margin-top:10px">현재 판은 96칸 변형 체스 규칙으로, 일반 8×8 공식 체스 엔진과 별도로 관리돼.</p></div></div></div></section>
+</div><div id="promotionModal" class="hidden"><div class="promo-box"><h2>폰 승격 기물 선택</h2><p class="note">폰이 진영 반대편에 도착했어. 원하는 기물을 선택해.</p><div class="bar" id="promoChoices"></div><button style="margin-top:13px" id="cancelPromo">취소</button></div></div>
+<script src="./three_chess_engine.js"></script><script>
+(()=>{'use strict';const storage=(()=>{try{return window.sessionStorage}catch{return{getItem:()=>null,setItem:()=>{},removeItem:()=>{}}}})();const E=window.ThreeChess,$=id=>document.getElementById(id);let mode='entry',localPicked=[],choosingColor=null,s=E.fresh(),socket=null,socketId=0,reconnectTimer=null,refreshTimer=null,token=storage.getItem('trichess7_session')||'',myColor=null,roomId='',joined=false,waiting=false,awaiting=false,chosen=-1,seq=0,link=false,players=[],game=0,pending=null,frameCount=0,fps=0,lastFps=performance.now(),tickCount=0,recvHz=0,lastHz=performance.now(),latency=null,pingTimer=null;
+const show=(id)=>{for(const x of ['entry','lobby','picking','playing'])$(x).classList.toggle('hidden',x!==id);};
+const safe=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const colorClass={w:'#fffaf0',b:'#0b1421',r:'#ea5878'},glyph={w:{k:'♔',q:'♕',r:'♖',b:'♗',n:'♘',p:'♙'},b:{k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟\uFE0E'},r:{k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟\uFE0E'}};
+// One canonical 96-cell board mesh shared by server logic and the browser.
+// Six congruent 4×4 panels meet at the centre, two for each player.
+const points=i=>E.polygons[i];
+function make(tag,props={}){const el=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(props))el.setAttribute(k,v);return el;}
+const svg=$('chessboard'),tiles=[],centers=[];const scene=make('g',{id:'boardScene'});svg.append(scene);const defs=make('defs');scene.append(defs);for(let i=0;i<E.N;i++){
+ const pts=points(i),center=E.centers[i];centers.push(center);
+ const shape=make('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:(E.row(i)+E.col(i))%2?'#e9edce':'#78995b',stroke:'#d5dbb6','stroke-width':'.8','data-cell':i});scene.append(shape);tiles.push(shape);
+ const title=make('title');title.textContent=E.id(i);shape.append(title);
+ const lbl=make('text',{x:center[0],y:center[1]+14,'text-anchor':'middle','font-size':'13','font-weight':'750',fill:(E.row(i)+E.col(i))%2?'#6d9659':'#eaf1cc','pointer-events':'none'});lbl.textContent=E.id(i);lbl.setAttribute('data-label','1');scene.append(lbl);
+}
+const marks=make('g',{'pointer-events':'none'}),pieces=make('g',{'pointer-events':'none'});scene.append(marks,pieces);
+svg.addEventListener('click',e=>{const p=e.target.closest?.('[data-cell]');if(p)choose(Number(p.getAttribute('data-cell')));});
+function boardAngle(){const color=mode==='online'?myColor:(mode==='local'?s.t:null);return color==='w'?-120:color==='b'?120:0;}
+function orientBoard(){const angle=boardAngle();scene.setAttribute('transform',`rotate(${angle} 610 472)`);
+  for(const label of scene.querySelectorAll('[data-label]')){const x=Number(label.getAttribute('x')),y=Number(label.getAttribute('y'));label.setAttribute('transform',`rotate(${-angle} ${x} ${y})`);}
+}
+function currentColor(){return mode==='local'?s.t:myColor;}
+function canMove(){return s.status==='playing'&&(mode==='local'||mode==='online'&&joined&&link&&!awaiting&&myColor===s.t);}
+function canPick(i){return canMove()&&s.b[i]?.c===s.t;}
+function legalSquares(){if(!canMove())return [];return E.legal(s,s.t).filter(x=>x.f===chosen);}
+function renderBoard(){orientBoard();marks.replaceChildren();pieces.replaceChildren();for(let i=0;i<E.N;i++){
+  const tile=tiles[i];tile.setAttribute('fill',(E.row(i)+E.col(i))%2?'#e9edce':'#78995b');
+ }
+ if(s.last)for(const i of [s.last.f,s.last.t])tiles[i].setAttribute('fill','#bfc83b');
+ if(chosen>=0){tiles[chosen].setAttribute('fill','#68c7e7');for(const m of legalSquares()){
+  const [x,y]=centers[m.t];const circ=make('circle',{cx:x,cy:y,r:s.b[m.t]?23:11,fill:s.b[m.t]?'#ef7187':'#2b9d62','fill-opacity':'.65',stroke:'#08221e','stroke-width':s.b[m.t]?4:1});marks.append(circ);
+ }
+  if(s.b[chosen]?.k==='k')for(const m of legalSquares())if(m.flag?.startsWith('castle')){
+   const flank=m.flag==='castle-short'?'short':'long',rook=E.layouts[s.t][flank].rook;
+   const [cx,cy]=centers[rook];marks.append(make('circle',{cx,cy,r:27,fill:'none',stroke:'#e9c783','stroke-width':5,'stroke-dasharray':'7 5'}));
+  }
+ }
+ for(let i=0;i<E.N;i++){const p=s.b[i];if(!p)continue;const [x,y]=centers[i];const t=make('text',{x,y:y+16,'text-anchor':'middle','font-size':'48','font-family':'Segoe UI Symbol, DejaVu Sans, sans-serif','font-weight':'750',fill:p.frozen?'#99a2af':colorClass[p.c],stroke:p.frozen?'#253348':p.c==='w'?'#132231':'#eae2d0','stroke-width':p.c==='w'?'1.6':'.55','paint-order':'stroke'});t.textContent=glyph[p.c][p.k];const a=boardAngle();t.setAttribute('transform',`rotate(${-a} ${x} ${y+16})`);pieces.append(t);}
+}
+function updateInfo(){const live=E.C.filter(c=>s.alive[c]);const title=s.status==='playing'?`${E.LABEL[s.t]} 차례${E.isCheck(s,s.t)?' · 체크!':''}`:s.status==='draw'?'무승부':`${E.LABEL[s.winner]||'무효'} 승리!`;
+ $('turnText').textContent=title;$('roomInfo').textContent=mode==='online'?`온라인 공개방 · ${s.seq}수`:`로컬 3인 · ${s.seq}수`;
+ $('gameInfo').textContent=s.status!=='playing'?s.reason:awaiting?'서버가 이동을 확인하는 중...':canMove()?'기물을 선택하고 이동 가능한 칸을 눌러.':mode==='online'?`${E.LABEL[s.t]}의 차례야. 상대 플레이어를 기다려.`:'차례를 진행해.';
+ const tb=$('teams');tb.replaceChildren();for(const c of E.C){const ps=players.find(p=>p.color===c),el=document.createElement('div');el.className='team'+(s.t===c&&s.status==='playing'?' active':'')+(!s.alive[c]?' dead':'');const left=document.createElement('div');const dot=document.createElement('span');dot.className='symbol '+c;left.append(dot,document.createTextNode(E.LABEL[c]+' · '+(ps?.name||'선택 대기')));const right=document.createElement('span');right.className='team-meta';right.textContent=!s.alive[c]?'회색 잔존 · 탈락':E.isCheck(s,c)?'체크':mode==='online'&&ps&&!ps.connected?'재접속 대기':s.t===c?'● 차례':'대기';el.append(left,right);tb.append(el);}
+ const log=$('moveLog');log.replaceChildren();for(const row of s.log.slice(-12).reverse()){const d=document.createElement('div');d.textContent=(row.color?E.LABEL[row.color]+' · ':'')+row.text;log.append(d);}if(!s.log.length){log.textContent='아직 진행된 수가 없어.';}
+ $('result').textContent=s.status==='playing'?'생존 왕국: '+live.map(c=>E.LABEL[c]).join(' · '):s.reason;
+ $('resignBtn').disabled=s.status!=='playing'||mode==='online'&&(!myColor||!s.alive[myColor]);
+ $('rematchBtn').classList.toggle('hidden',mode!=='online'||s.status==='playing');
+ $('resetBtn').classList.toggle('hidden',mode!=='local');
+ $('networkPill').textContent=mode==='local'?'로컬 3인':link?'● 서버 연결됨':'○ 재연결 중';$('linkInfo').textContent=mode==='online'?'서버에서 수·체크·승패를 검증하며 잠깐 끊겨도 같은 좌석으로 복귀해.':'서버 없이 한 화면에서 세 사람이 차례대로 플레이해.';
+}
+function draw(){renderBoard();updateInfo();}
+function choose(i){if(!canMove()){return;}
+ if(chosen>=0&&s.b[chosen]?.k==='k'&&s.b[i]?.c===s.t&&s.b[i]?.k==='r'){
+  const castle=legalSquares().find(m=>m.flag?.startsWith('castle')&&E.layouts[s.t][m.flag==='castle-short'?'short':'long'].rook===i);
+  if(castle){submitMove(chosen,castle.t,'q');return;}
+ }
+ if(canPick(i)){if(chosen===i)chosen=-1;else chosen=i;draw();return;}
+ const opts=legalSquares().filter(m=>m.t===i);if(!opts.length){chosen=-1;draw();return;}
+ if(opts.some(x=>x.promote)){$('promotionModal').classList.remove('hidden');const box=$('promoChoices');box.replaceChildren();for(const k of ['q','r','b','n']){const bt=document.createElement('button');bt.className='promo-btn';bt.textContent=glyph[s.t][k];bt.onclick=()=>{closePromo();submitMove(chosen,i,k);};box.append(bt);}return;}
+ submitMove(chosen,i,'q');}
+ function closePromo(){$('promotionModal').classList.add('hidden');}
+ $('cancelPromo').onclick=closePromo;
+ function submitMove(f,t,promote){if(f<0||!canMove())return;chosen=-1;
+  if(mode==='local'){const out=E.move(s,{f,t,promote});if(!out.ok){$('gameInfo').textContent=out.error;draw();return;}s=out.state;draw();}
+  else{awaiting=true;send({type:'tri_move',seq:s.seq,f,t,promote});draw();}
+ }
+ function freshLocal(){s=E.fresh();chosen=-1;awaiting=false;show('playing');draw();}
+function beginLocalSelection(){localPicked=[];players=[];myColor=null;mode='local';stopSocket();show('picking');renderChoices();}
+function chooseColor(color){
+ if(mode==='local'){
+  if(localPicked.includes(color))return;
+  localPicked.push(color);players=localPicked.map((c,i)=>({color:c,name:`로컬 플레이어 ${i+1}`,connected:true}));
+  if(localPicked.length===3)freshLocal();else renderChoices();
+ }else if(mode==='online'&&joined&&link&&myColor===null&&!choosingColor){
+  if(send({type:'tri_choose_color',color})){choosingColor=color;renderChoices();$('choiceStatus').textContent='선택을 서버에서 확인하는 중...';}
+ }
+}
+function renderChoices(){
+ const taken=new Set(mode==='local'?localPicked:players.map(p=>p.color).filter(Boolean));
+ for(const c of E.C){const b=$('choose_'+c),mine=mode==='online'&&myColor===c;
+  b.disabled=taken.has(c)||mode==='online'&&(!link||!joined||myColor!==null||!!choosingColor);
+  b.classList.toggle('taken',taken.has(c)&&!mine);b.classList.toggle('selected',mine||mode==='local'&&taken.has(c));
+  b.querySelector('small').textContent=mine?'내가 선택한 진영':taken.has(c)?'선택 완료 · 사용 불가':'선택 가능';
+ }
+ const mine=mode==='online'&&myColor!==null;
+ $('choiceStatus').textContent=mode==='local'?`로컬 플레이어 ${localPicked.length+1} 색 선택 · ${localPicked.length}/3명 완료`:
+  mine?`${E.LABEL[myColor]} 선택 완료 · 나머지 플레이어 대기 (${players.filter(p=>p.color).length}/3)`:
+  `내 진영을 선택해 · ${players.filter(p=>p.color).length}/3명 선택 완료`;
+ const list=$('choicePlayers');list.replaceChildren();for(const p of players){const e=document.createElement('span');e.textContent=`${p.name} · ${p.color?E.LABEL[p.color]:'미선택'}`;list.append(e);}
+}
+for(const c of E.C)$('choose_'+c).onclick=()=>chooseColor(c);
+$('choiceBack').onclick=()=>{if(mode==='online'&&joined){send({type:'tri_leave'});$('choiceStatus').textContent='방에서 나가는 중...';return;}goEntry();};
+ function stopSocket(){socketId++;clearTimeout(reconnectTimer);clearInterval(pingTimer);if(socket){const old=socket;socket=null;old.onclose=null;old.onmessage=null;old.onerror=null;try{old.close()}catch{}}link=false;joined=false;}
+ function goEntry(){mode='entry';stopSocket();token='';storage.removeItem('trichess7_session');myColor=null;roomId='';show('entry');$('networkPill').textContent='로컬 · 대기';}
+ $('localBtn').onclick=beginLocalSelection;
+ $('onlineBtn').onclick=()=>{mode='online';show('lobby');connect();};
+ $('lobbyBack').onclick=goEntry;
+ $('resetBtn').onclick=()=>{if(mode==='local')freshLocal();};
+ $('backBtn').onclick=()=>{if(mode==='online'&&joined){if(!confirm('진행 중인 공개방에서 나갈까? 기권으로 처리될 수 있어.'))return;send({type:'tri_leave'});}if(mode==='local')goEntry();else{joined=false;token='';roomId='';storage.removeItem('trichess7_session');show('lobby');send({type:'tri_list'});}};
+ $('resignBtn').onclick=()=>{if(!confirm('현재 진영이 기권할까?'))return;if(mode==='local'){s=E.resign(s,s.t);draw();}else if(link)send({type:'tri_resign'});};
+ $('rematchBtn').onclick=()=>{if(mode==='online')send({type:'tri_rematch'});};
+ function send(m){if(socket&&socket.readyState===WebSocket.OPEN){socket.send(JSON.stringify(m));return true;}return false;}
+ function connect(){if(mode!=='online')return;if(socket&&[0,1].includes(socket.readyState))return;const n=++socketId,addr=(location.protocol==='https:'?'wss://':'ws://')+location.host+'/three-chess-ws';
+  try{socket=new WebSocket(addr);}catch(e){$('lobbyInfo').textContent='WebSocket 연결 실패: '+e.message;reconnectTimer=setTimeout(connect,1500);return;}
+  socket.onopen=()=>{if(n!==socketId)return;link=true;$('lobbyInfo').textContent='서버 연결 성공 · 공개방 선택';$('networkPill').textContent='● 서버 연결됨';if(token)send({type:'tri_resume',token});else send({type:'tri_list'});
+   clearInterval(pingTimer);pingTimer=setInterval(()=>send({type:'tri_probe',ts:Date.now()}),2000);};
+  socket.onmessage=e=>{if(n!==socketId)return;let m;try{m=JSON.parse(e.data);}catch{return;}handle(m);};
+  socket.onclose=()=>{if(n!==socketId)return;socket=null;link=false;awaiting=false;$('lobbyInfo').textContent='연결이 잠시 끊겼어 · 자동으로 복구하는 중';$('networkPill').textContent='○ 재연결 중';reconnectTimer=setTimeout(connect,1500);if(!joined)show('lobby');};
+  socket.onerror=()=>{$('lobbyInfo').textContent='네트워크 오류 · 복구 중';};
+ }
+ function handle(m){if(m.type==='tri_tick'){tickCount++;return;}
+  if(m.type==='tri_pong'){latency=Math.max(0,Date.now()-m.ts);return;}
+  if(m.type==='tri_rooms'){const box=$('rooms');box.replaceChildren();if(!m.rooms.length){const d=document.createElement('div');d.className='muted';d.textContent='지금은 공개방이 없어. 새 방을 만들어 봐!';box.append(d);}else for(const r of m.rooms){const d=document.createElement('div');d.className='room';const info=document.createElement('div');const name=document.createElement('b');name.textContent=r.name;const meta=document.createElement('small');meta.textContent=`${r.count}/3명 입장 · ${r.remaining}자리 남음`;info.append(name,meta);const b=document.createElement('button');b.textContent='참가';b.onclick=()=>send({type:'tri_join',roomId:r.id,nickname:$('nickname').value});d.append(info,b);box.append(d);}return;}
+  if(m.type==='tri_joined'){joined=true;roomId=m.roomId;myColor=m.color;token=m.token;storage.setItem('trichess7_session',token);$('lobbyInfo').textContent=myColor?E.LABEL[myColor]+' 진영 복구 완료':'공개방 입장 완료 · 진영을 선택해';show('picking');renderChoices();return;}
+  if(m.type==='tri_chosen'){myColor=m.color;choosingColor=null;renderChoices();return;}
+  if(m.type==='tri_resume_failed'){choosingColor=null;joined=false;token='';roomId='';myColor=null;storage.removeItem('trichess7_session');show('lobby');send({type:'tri_list'});$('lobbyInfo').textContent='기존 방의 재접속 기간이 종료됐어. 새 방에 참가해.';return;}
+  if(m.type==='tri_left'){joined=false;token='';roomId='';myColor=null;storage.removeItem('trichess7_session');show('lobby');send({type:'tri_list'});return;}
+  if(m.type==='tri_state'){if(m.roomId!==roomId)return;
+   const newGame=game!==m.game;game=m.game;if(newGame)chosen=-1;
+   s=m.position;seq=m.seq;players=m.players;awaiting=false;waiting=m.status==='waiting';
+   if(waiting){show('picking');renderChoices();return;}
+   if(myColor===null){show('picking');renderChoices();return;}
+   $('waitOverlay').classList.add('hidden');show('playing');draw();return;}
+  if(m.type==='tri_error'){awaiting=false;choosingColor=null;$('gameInfo').textContent='⚠ '+m.message;$('lobbyInfo').textContent='⚠ '+m.message;
+   if(!$('picking').classList.contains('hidden')){renderChoices();$('choiceStatus').textContent='⚠ '+m.message;}return;}
+ }
+ $('createBtn').onclick=()=>send({type:'tri_create',name:$('roomname').value,nickname:$('nickname').value});$('refreshBtn').onclick=()=>send({type:'tri_list'});
+ function hud(now){frameCount++;if(now-lastFps>=500){fps=Math.round(frameCount*1000/(now-lastFps));$('fps').textContent=String(fps);frameCount=0;lastFps=now;}
+  if(now-lastHz>=1000){recvHz=Math.round(tickCount*1000/(now-lastHz));$('hz').textContent=mode==='online'?String(recvHz):'—';$('rtt').textContent=mode==='online'&&latency!==null?String(latency):'—';tickCount=0;lastHz=now;}
+  requestAnimationFrame(hud);
+ }requestAnimationFrame(hud);
+ if(token&&location.protocol!=='file:'){mode='online';show('lobby');connect();}
+})();
+</script></body></html>

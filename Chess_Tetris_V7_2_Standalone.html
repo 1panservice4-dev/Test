@@ -1,0 +1,156 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CHESS TETRIS | Tricky Tower DUEL V7.2</title>
+<style>
+:root{color-scheme:dark;--bg:#081225;--panel:#14233b;--line:#344763;--txt:#e8f1ff;--muted:#a8b9d2;--blue:#278bff;--red:#ef536a}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#263f6e 0%,#0a1730 42%,#07111e 100%);color:var(--txt);font:15px/1.5 system-ui,Arial,sans-serif;min-height:100vh}button,input{font:inherit}button{cursor:pointer;transition:.12s;border:1px solid #4d6381;border-radius:12px;background:#1b3253;color:#f5faff;padding:10px 14px}button:hover:not(:disabled){filter:brightness(1.16);transform:translateY(-1px)}button:disabled{opacity:.36;cursor:not-allowed}.primary{background:linear-gradient(115deg,#1f8eff,#3869dd);border-color:#70b8ff;font-weight:800}.danger{background:#633140;border-color:#ab5369}.app{max-width:1160px;margin:auto;padding:20px 16px 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:19px;flex-wrap:wrap}header h1{margin:0;font-size:clamp(27px,4vw,41px);letter-spacing:-.045em}header p{color:#a9bcda;margin:2px 0;font-size:13px}.eyebrow{font-size:11px;letter-spacing:.18em;color:#79b4ff;font-weight:800}.box{background:#112139ed;border:1px solid #334e74;border-radius:20px;padding:20px;box-shadow:0 12px 40px #02081254}.intro{max-width:750px;margin:55px auto}.intro h2{font-size:32px;margin:0 0 9px}.intro p{color:var(--muted)}.selection{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}.select-mode{text-align:left;padding:25px;display:flex;flex-direction:column;gap:8px;min-height:165px}.select-mode strong{font-size:22px}.select-mode span{color:#b6c9e3;font-size:13px}.layout{display:grid;grid-template-columns:minmax(300px,600px) minmax(250px,1fr);align-items:start;gap:18px}.board-shell{padding:14px;background:linear-gradient(135deg,#2a4876,#0b1d37);border-radius:18px;border:1px solid #7694bb}.board{display:grid;grid-template-columns:repeat(8,1fr);width:100%;aspect-ratio:1;overflow:hidden;border-radius:7px;border:2px solid #15233d}.sq{position:relative;width:100%;aspect-ratio:1;padding:0;border:0!important;border-radius:0;background:#d2ddeb;color:#111;display:grid;place-items:center;touch-action:manipulation}.sq.dark{background:#7998bb}.sq.light{background:#d8e7ef}.sq.selected{background:#ffdc83}.sq.target::after{content:'';background:#24a46b99;width:23%;height:23%;position:absolute;border-radius:50%}.sq.capture::after{content:'';position:absolute;inset:5%;border:4px solid #ee873cba;border-radius:50%}.sq.last{box-shadow:inset 0 0 0 4px #eab952a6}.sq.check{box-shadow:inset 0 0 22px 10px #fe454caa}.sq.completed{box-shadow:inset 0 0 0 5px #f6d66d,inset 0 0 22px #fff2a8aa}.piece{width:77%;height:77%;filter:drop-shadow(0 3px 1px #06142c44);z-index:1;pointer-events:none}.file-label{position:absolute;right:3px;bottom:3px;font-size:10px;line-height:1;font-weight:900;opacity:.65;pointer-events:none}.square-label{position:absolute;font-size:10px;line-height:1;font-weight:900;opacity:.65;left:3px;top:3px;pointer-events:none}.caption{font-size:12px;color:#abc5e4;margin-top:9px}.status{font-size:19px;font-weight:850;margin:4px 0 10px}.side{color:#75b7ff}.side.red{color:#ff8092}.controls{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.pane{display:grid;gap:12px}.sub{color:var(--muted);font-size:12px}.inputrow{display:flex;gap:8px;flex-wrap:wrap}.inputrow input{border:1px solid #526b89;background:#0b1930;color:#fff;padding:11px 12px;border-radius:10px;min-width:110px;flex:1}.rooms{display:grid;gap:7px;max-height:210px;overflow:auto}.room{display:flex;gap:7px;align-items:center;justify-content:space-between;background:#0b1930;padding:10px;border-radius:12px}.pill{border:1px solid #516e96;border-radius:30px;padding:4px 9px;font-size:11px;color:#c3d7ed}.log{height:185px;overflow:auto;background:#0c1b32;border-radius:12px;padding:9px 13px;font-family:ui-monospace,monospace;font-size:13px}.log div{padding:3px 0;border-bottom:1px solid #ffffff0c}.rules{font-size:13px;color:#b8cbe4}.rules strong{color:#fff}.legend{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dot{width:12px;height:12px;display:inline-block;border-radius:50%;background:var(--blue)}.dot.red{background:var(--red)}.banner{padding:13px;border-radius:10px;background:#1b3553;border:1px solid #42658c;margin-bottom:13px}.hidden{display:none!important}.promo{display:flex;gap:8px;flex-wrap:wrap}.promo button{min-width:60px}.win{font-size:22px;font-weight:900;color:#f8d788}#onlineStatus{font-size:13px;color:#afd5f8}footer{font-size:11px;color:#8eabc8;margin-top:25px}@media(max-width:850px){.layout{grid-template-columns:1fr}.board-shell{max-width:650px}.selection{grid-template-columns:1fr}.intro{margin-top:20px}}@media(max-width:420px){.app{padding:13px 8px}.box{padding:13px}.board-shell{padding:7px}.square-label{font-size:8px}.sq.capture::after{border-width:3px}.piece{width:87%;height:87%}button{padding:9px}}
+.move-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.move-card{background:#0b1c35;border:1px solid #345277;border-radius:12px;padding:9px 6px;text-align:center}.move-card strong{display:block;font-size:12px;margin-bottom:5px}.mini-grid{width:100%;max-width:143px;margin:auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}.mini-grid.nine{grid-template-columns:repeat(9,minmax(0,1fr));max-width:172px;gap:1px}.mini-grid.nine .mini-cell{font-size:9px}.mini-grid.seven{grid-template-columns:repeat(7,minmax(0,1fr));max-width:167px;gap:1px}.mini-grid.seven .mini-cell{font-size:10px}.mini-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:2px;background:#233854;color:#fff;font-size:13px;font-weight:800}.mini-yes{background:#1e8b77;color:#eafffa}.mini-origin{background:#ffd879;color:#172336;font-size:16px}@media(max-width:450px){.move-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head><body><div class="app"><header><div><div class="eyebrow">TRICKY TOWER DUEL · NEW STAGE</div><h1>♟ CHESS TETRIS</h1><p>테트리스 모양의 회전 범위 안에서 착지하는 체스 · 가로/세로 완성 승리</p></div><button onclick="history.length>1?history.back():location.reload()">← 3개 스테이지 전체 로비</button></header>
+<section id="entry" class="intro box"><h2>새로운 3번째 스테이지</h2><p><b>왕만 기존 체스 기물</b>이고, 나머지 5종은 그림대로 생긴 테트리스 기물이야. <b>이동도 그림 속 체크 표시대로!</b> 기물의 모양을 돌려 표시되는 <b>제한된 칸 중 한 곳</b>으로 이동해. 모든 기물은 중간 칸을 뛰어넘을 수 있고, 착지 칸의 적을 잡을 수 있어. 파란색 선공.</p><div class="selection"><button class="select-mode" id="localChoice"><strong>♙ 한 컴퓨터 2인 대전</strong><span>파랑 ↔ 빨강 번갈아 두기 · 서버 없이 바로 시작</span></button><button class="select-mode" id="onlineChoice"><strong>🌐 온라인 공개방 대전</strong><span>기존 8787 서버 사용 · 비밀번호 없는 방 · 컴퓨터 2대 지원</span></button></div><div class="rules"><strong>특별 승리:</strong> 아군 기물로 <b>가로 8칸</b>(자기 시작 세 행 제외) 또는 <b>세로 8칸</b>(시작 행 포함)을 채우면 즉시 승리! 체크메이트로도 승리할 수 있어.</div></section>
+<section id="play" class="layout hidden"><main><div class="board-shell"><div class="legend" style="margin-bottom:9px"><span class="dot"></span><b>파랑 선공</b><span class="dot red"></span><b>빨강 후공</b><span style="margin-left:auto" class="pill" id="perspectiveTag">🔵 파랑 아래</span><span class="pill" id="roomTag">로컬 게임</span></div><div class="board" id="board"></div><div class="caption" id="coordinates">기물은 한 칸 점유 · 기물 모양을 회전해 얻는 표시 칸만 이동 가능 · 룩 최대 3칸 · 중간 기물 점프 가능</div></div><div class="controls"><button id="backBtn">← 메뉴</button><button id="resetBtn">새 게임</button><button id="undoBtn">한 수 되돌리기</button><button id="resignBtn" class="danger hidden">기권</button><button id="rematchBtn" class="primary hidden">재대결 신청</button><button id="claimBtn" class="hidden">무승부 주장</button></div><div id="promoPanel" class="box hidden"><strong>폰 승격 기물 선택</strong><div class="promo" id="promos"></div></div></main><aside class="pane"><div class="box"><div id="turnText" class="status">파랑 차례</div><div class="sub" id="stateHint">기물을 선택해 이동하세요.</div><div class="banner hidden" id="resultBanner"></div><div class="sub" id="onlineStatus"></div></div><div class="box" id="onlinePanel"><h3 style="margin:0 0 8px">🌐 공개방 대전</h3><div id="joinForm"><div class="inputrow"><input id="nick" maxlength="16" placeholder="닉네임" value="플레이어"><input id="roomName" maxlength="16" placeholder="방 이름" value="체스 테트리스 대전"></div><div class="controls"><button id="createBtn" class="primary">공개방 만들기</button><button id="listBtn">목록 새로고침</button></div><div id="rooms" class="rooms"></div></div><div id="roomInfo" class="hidden"><p id="players"></p><p class="sub">참가자는 2명까지. 두 번째 플레이어가 참가하면 자동 시작돼.</p><button id="leaveBtn">방 나가기</button></div></div><div class="box"><h3 style="margin:0 0 8px">최근 수</h3><div id="log" class="log"></div></div><div class="box rules"><strong>규칙 안내</strong><p><b>일반 체스와 이동 방식이 다름:</b> 폰(O) = 주변 8칸, 룩(I) = 가로·세로 최대 3칸, 나이트(L)·비숍(S) = 그림의 2×3 회전 범위 안에 표시된 칸, 퀸(T) = 중심에서 거리 2의 마름모, 왕(♚) = 일반 체스 왕과 동일.</p><p>모두 상대/아군 기물을 뛰어넘을 수 있으나 아군 기물이 있는 칸에는 착지할 수 없어. 적 기물의 칸에 착지하면 잡고, 왕은 체크 상태로 갈 수 없어. 캐슬링·끝줄 폰 승격·체크메이트는 유지하고, 2칸 전진이 없는 폰 특성상 앙파상은 없어.</p><p>가로/세로 완성은 <b>자기 기물만 인정</b>하며 중간에 상대 기물이나 빈 칸이 있으면 성립하지 않아. 가로 완성은 자기 시작 1·2·3줄을 제외해. <b>세로 완성은 시작 1·2·3줄까지 포함한 8칸 전체</b>가 필요해.</p><p>기물 모양: 폰 O / 룩 I / 나이트 L / 비숍 S / 퀸 T / <b>왕 ♚(일반 체스 킹)</b>.</p></div><div class="box"><h3 style="margin:0 0 7px">그림 기반 이동 범위</h3><p class="sub" style="margin:0 0 12px">미니판 중앙의 기물 기준 · 초록색은 선택할 수 있는 착지 칸 · 룩은 최대 3칸까지만 이동 · 모든 기물 중간 칸 뛰어넘기 가능</p><div class="move-cards" id="movementGuide"></div></div></aside></section><footer>체스 테트리스 V7.2 · 손그림 기준 특수 이동 + 전체 기물 점프 + 8×8 줄 완성 · 서버 검증 2인 대전</footer></div><script>
+/* Chess Tetris V7 — movement defined by the user's reference diagram.
+   King: orthodox one-square movement; O pawn: adjacent 8; I rook: THREE squares maximum in each orthogonal direction.
+   L knight / S bishop: bounded 5x5 diagram targets (rotated shape placements); T queen: Manhattan diamond radius 2.
+   Every piece can jump past other pieces (landing square still must be empty/enemy).
+   Standard king-safety, castling, promotion and repetition rules are retained where applicable.
+   En passant is inapplicable because O pawns have no two-square advance. */
+(function(root,factory){const a=factory();if(typeof module==='object'&&module.exports)module.exports=a;root.ChessTetris=a})(typeof globalThis!=='undefined'?globalThis:this,function(){
+'use strict';
+const START='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+// Offsets as (file Δ, rank-in-screen Δ); positive y points toward blue's home rank.
+const O=[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
+const L=[[-1,-2],[0,-2],[1,-2],[-2,-1],[0,-1],[2,-1],[-2,0],[-1,0],[1,0],[2,0],[-2,1],[0,1],[2,1],[-1,2],[0,2],[1,2]];
+const S=[[-1,-2],[1,-2],[-2,-1],[-1,-1],[0,-1],[1,-1],[2,-1],[-1,0],[1,0],[-2,1],[-1,1],[0,1],[1,1],[2,1],[-1,2],[1,2]];
+const T=[[0,-2],[-1,-1],[0,-1],[1,-1],[-2,0],[-1,0],[1,0],[2,0],[-1,1],[0,1],[1,1],[0,2]];
+// The reference sketch specifies selectable landing cells, not continuous sliding.
+// Rotations of each tetromino are reflected by the bounded target map below.
+// Every move jumps intervening pieces and occupies exactly one square.
+const I=[];for(let n=1;n<=3;n++)I.push([n,0],[-n,0],[0,n],[0,-n]);
+const SHAPES={p:O,n:L,r:I,b:S,q:T,k:O};
+const on=i=>i>=0&&i<128&&!(i&0x88);
+const color=p=>!p||p==='.'?0:(p===p.toUpperCase()?1:-1);
+const sq=i=>'abcdefgh'[i&7]+(8-(i>>4));
+const idx=s=>(8-Number(s[1]))*16+'abcdefgh'.indexOf(s[0]);
+function initial(){const b=Array(128).fill('.');START.split(' ')[0].split('/').forEach((row,r)=>{let c=0;for(const p of row){if(/[1-8]/.test(p))c+=Number(p);else b[r*16+c++]=p}});return {b,t:1,c:15,ep:-1,half:0,full:1}}
+function destinations(f,p){const x=f&7,y=f>>4;
+ return (SHAPES[p]||[]).flatMap(([dx,dy])=>{const xx=x+dx,yy=y+dy;
+  return xx>=0&&xx<8&&yy>=0&&yy<8?[yy*16+xx]:[];
+ });
+}
+// Attacks obey the diagram even when pieces stand between attacker and king.
+function attacked(s,target,by){if(target<0)return false;for(let f=0;f<128;f++){if(!on(f)||color(s.b[f])!==by)continue;for(const t of destinations(f,s.b[f].toLowerCase()))if(t===target)return true}return false}
+function inCheck(s,who=s.t){const i=s.b.indexOf(who===1?'K':'k');return i<0||attacked(s,i,-who)}
+function apply(s,m){const [f,t,q='',flag='']=m,b=s.b.slice(),p=b[f],captured=b[t];let c=s.c;
+ b[f]='.';b[t]=q?(s.t===1?q.toUpperCase():q):p;
+ if(flag==='castle'){const rf=t>f?f+3:f-4,rt=t>f?f+1:f-1;b[rt]=b[rf];b[rf]='.'}
+ if(p==='K')c&=~3;if(p==='k')c&=~12;
+ const bits={119:1,112:2,7:4,0:8};if(p.toLowerCase()==='r')c&=~(bits[f]||0);if(captured.toLowerCase()==='r')c&=~(bits[t]||0);
+ return {b,t:-s.t,c,ep:-1,half:p.toLowerCase()==='p'||captured!=='.'?0:s.half+1,full:s.full+(s.t===-1?1:0)}
+}
+function pseudo(s){const out=[];
+ for(let f=0;f<128;f++){
+  if(!on(f)||color(s.b[f])!==s.t)continue;
+  const p=s.b[f].toLowerCase();
+  const add=(t,flag='')=>{
+   if(color(s.b[t])===s.t||s.b[t].toLowerCase()==='k')return;
+   if(p==='p'&&(t>>4===0||t>>4===7))for(const q of ['q','r','b','n'])out.push([f,t,q,flag]);
+   else out.push([f,t,'',flag]);
+  };
+  for(const t of destinations(f,p))add(t);
+  if(p==='k'){
+   const home=s.t===1?116:4,rook=s.t===1?'R':'r',bits=s.t===1?[1,2]:[4,8];
+   if(f===home&&!inCheck(s)){
+    if((s.c&bits[0])&&s.b[f+3]===rook&&s.b[f+1]==='.'&&s.b[f+2]==='.'&&!attacked(s,f+1,-s.t)&&!attacked(s,f+2,-s.t))add(f+2,'castle');
+    if((s.c&bits[1])&&s.b[f-4]===rook&&s.b[f-1]==='.'&&s.b[f-2]==='.'&&s.b[f-3]==='.'&&!attacked(s,f-1,-s.t)&&!attacked(s,f-2,-s.t))add(f-2,'castle');
+   }
+  }
+ }
+ return out;
+}
+function legal(s){return pseudo(s).filter(m=>!inCheck(apply(s,m),s.t))}
+// Horizontal: exclude the mover's first THREE home ranks; Vertical: ALL eight ranks, home ranks included.
+function lineWin(s,who){const owns=i=>color(s.b[i])===who;const rows=who===1?[0,1,2,3,4]:[3,4,5,6,7];
+ for(const r of rows)if(Array.from({length:8},(_,c)=>r*16+c).every(owns))return {kind:'row',index:r};
+ for(let c=0;c<8;c++)if(Array.from({length:8},(_,r)=>r).every(r=>owns(r*16+c)))return {kind:'column',index:c};
+ return null;
+}
+// Orthodox insufficient-material patterns aren't valid for these custom moving pieces.
+// Only bare kings are known to lack a possible line/checkmate under the current setup.
+function insufficient(s){for(let i=0;i<128;i++)if(on(i)&&s.b[i]!=='.'&&s.b[i].toLowerCase()!=='k')return false;return true}
+function key(s){return s.b.filter((p,i)=>on(i)).join('')+'|'+s.t+'|'+s.c}
+function outcome(s,history=[]){const winner=-s.t,ln=lineWin(s,winner);if(ln)return {done:true,winner,reason:'line',line:ln};const moves=legal(s);
+ if(!moves.length){const check=inCheck(s);return {done:true,winner:check?winner:0,reason:check?'checkmate':'stalemate'}}
+ if(insufficient(s))return {done:true,winner:0,reason:'insufficient'};
+ if(s.half>=150)return {done:true,winner:0,reason:'75move'};
+ if(history.filter(x=>x===key(s)).length>=5)return {done:true,winner:0,reason:'fivefold'};
+ return {done:false,winner:null,reason:''};
+}
+function moveKey(m){return sq(m[0])+sq(m[1])+m[2]}
+function parseMove(s,str){return legal(s).find(m=>moveKey(m)===str)||null}
+function notation(s,m){const p=s.b[m[0]].toUpperCase();if(m[3]==='castle')return m[1]>m[0]?'O-O':'O-O-O';
+ const capture=s.b[m[1]]!=='.';let label=p==='P'?(capture?sq(m[0])[0]:''):p;
+ if(p!=='P'){const competing=legal(s).filter(x=>x[0]!==m[0]&&x[1]===m[1]&&s.b[x[0]]===s.b[m[0]]);
+ if(competing.length)label+=!competing.some(x=>(x[0]&7)===(m[0]&7))?sq(m[0])[0]:!competing.some(x=>(x[0]>>4)===(m[0]>>4))?sq(m[0])[1]:sq(m[0]);}
+ label+=(capture?'x':'')+sq(m[1])+(m[2]?'='+m[2].toUpperCase():'');const next=apply(s,m);
+ return label+(lineWin(next,s.t)?'★':inCheck(next)?legal(next).length?'+':'#':'');
+}
+return {START,SHAPES,initial,on,color,sq,idx,destinations,attacked,inCheck,legal,apply,lineWin,insufficient,key,outcome,moveKey,parseMove,notation};
+});
+
+</script><script>
+'use strict';const E=window.ChessTetris;if(!E){document.body.insertAdjacentHTML('afterbegin','<p style="color:red;padding:20px">게임 서버의 /chess_engine.js 경로를 확인하세요.</p>');throw Error('Chess engine missing')}
+const $=id=>document.getElementById(id),boardEl=$('board');let mode='local',sock=null,meSide=1,roomId='',token='',game=E.initial(),hist=[E.key(game)],history=[game],moves=[],selected=-1,promotions=null,ending=null,roomStatus='local',lastMove=null,connection=false,connectedOnce=false,reconnectTimer=null,roomPlayers=[],gameId=0,claimable=false;
+const shapes={p:[[0,0],[1,0],[0,1],[1,1]],r:[[0,0],[0,1],[0,2],[0,3]],n:[[0,0],[0,1],[0,2],[1,0]],b:[[0,0],[1,0],[1,1],[2,1]],q:[[1,0],[0,1],[1,1],[2,1]]};
+function pieceSvg(p){const red=E.color(p)===-1,k=p.toLowerCase();let svg=`<svg class="piece" viewBox="0 0 80 80" role="img" aria-label="${k}">`;
+ const fill=red?'#ef536a':'#278bff',stroke=red?'#a02c40':'#0754ad';
+ if(k==='k'){
+  // The king is the ONLY piece with a traditional chess-piece silhouette.
+  svg+=`<text x="40" y="63" text-anchor="middle" font-size="69" font-family="DejaVu Sans, Segoe UI Symbol, serif" fill="${fill}" stroke="${stroke}" stroke-width="1.6" paint-order="stroke">♚</text>`;
+ }else{
+  const cells=shapes[k]||[],maxX=Math.max(...cells.map(x=>x[0])),maxY=Math.max(...cells.map(x=>x[1]));
+  const unit=k==='r'?14:17,w=(maxX+1)*unit,h=(maxY+1)*unit,x0=(80-w)/2,y0=(80-h)/2;
+  for(const [x,y] of cells)svg+=`<rect x="${x0+x*unit+1}" y="${y0+y*unit+1}" width="${unit-2}" height="${unit-2}" rx="1.9" fill="${fill}" stroke="${stroke}" stroke-width="2"/>`;
+ }
+ return svg+'</svg>';
+}
+function buildMovementGuide(){
+ const order=[['p','폰 O · 1칸'],['n','나이트 L · 회전 2×3'],['r','룩 I · 최대 3칸'],['b','비숍 S · 회전 2×3'],['q','퀸 T · 회전'],['k','킹 ♚ · 1칸']];
+ const root=$('movementGuide');root.innerHTML='';
+ for(const [p,title] of order){
+  const card=document.createElement('div');card.className='move-card';
+  const caption=document.createElement('strong');caption.textContent=title;card.appendChild(caption);
+  const mini=document.createElement('div');mini.className='mini-grid';
+  const range=p==='r'?3:2,offsets=new Set((E.SHAPES[p]||[]).map(([x,y])=>`${x},${y}`));
+  if(p==='r')mini.classList.add('seven');
+  for(let dy=-range;dy<=range;dy++)for(let dx=-range;dx<=range;dx++){
+   const cell=document.createElement('span');cell.className='mini-cell';
+   if(dx===0&&dy===0){cell.classList.add('mini-origin');cell.textContent=p==='k'?'♚':p.toUpperCase()}
+   else if(offsets.has(`${dx},${dy}`)){cell.classList.add('mini-yes');cell.textContent='✓'}
+   mini.appendChild(cell);
+  }
+  card.appendChild(mini);root.appendChild(card);
+ }
+}
+buildMovementGuide();
+function choose(i){if(ending||promotions||(mode==='online'&&(roomStatus!=='playing'||!connection||game.t!==meSide)))return;const piece=game.b[i];if(E.color(piece)===game.t){selected=selected===i?-1:i;draw();return}const opts=E.legal(game).filter(m=>m[0]===selected&&m[1]===i);if(opts.length>1){promotions=opts;showPromos();return}if(opts.length===1)makeMove(opts[0]);else{selected=-1;draw()}}
+function showPromos(){$('promoPanel').classList.remove('hidden');$('promos').innerHTML='';for(const m of promotions){const b=document.createElement('button');b.innerHTML=pieceSvg(game.t===1?m[2].toUpperCase():m[2]);b.setAttribute('aria-label',m[2]);b.onclick=()=>{promotions=null;$('promoPanel').classList.add('hidden');makeMove(m)};$('promos').append(b)}}
+function makeMove(m){if(mode==='online'){if(!socketSend({type:'chess_move',move:E.moveKey(m)}))setStatus('서버 연결이 끊겨 수를 전송하지 못했어.');selected=-1;return}const label=E.notation(game,m);game=E.apply(game,m);history.push(game);hist.push(E.key(game));moves.push({side:-game.t,move:E.moveKey(m),label});lastMove=m;const end=E.outcome(game,hist);ending=end.done?end:null;selected=-1;draw()}
+function endingText(e){if(!e)return'';const p=e.winner===1?'파랑':e.winner===-1?'빨강':'무승부';const r={line:'가로/세로 한 줄 완성!',checkmate:'체크메이트!',stalemate:'스테일메이트',insufficient:'기물 부족',fivefold:'5회 반복',threefold:'3회 반복',resign:'상대 기권',opponent_left:'상대 퇴장', '50move':'50수 규칙','75move':'75수 규칙'}[e.reason]||e.reason;return e.winner===0?`무승부 · ${r}`:`${p} 승리! · ${r}`}
+function viewSide(){return mode==='online'?meSide:game.t}
+function draw(){const movesLegal=(!ending&&(! (mode==='online'&&game.t!==meSide)))?E.legal(game):[];const targets=movesLegal.filter(m=>m[0]===selected).map(m=>m[1]);const redBottom=viewSide()===-1;boardEl.innerHTML='';for(let screenR=0;screenR<8;screenR++)for(let screenC=0;screenC<8;screenC++){const r=redBottom?7-screenR:screenR,c=redBottom?7-screenC:screenC,i=r*16+c,p=game.b[i],b=document.createElement('button');b.className='sq '+((r+c)%2?'dark':'light');if(i===selected)b.classList.add('selected');if(targets.includes(i))b.classList.add(p==='.'?'target':'capture');if(lastMove&&(i===lastMove[0]||i===lastMove[1]))b.classList.add('last');if(ending&&ending.reason==='line'&&ending.line&&(ending.line.kind==='row'?r===ending.line.index:c===ending.line.index)&&E.color(p)===ending.winner)b.classList.add('completed');if(p.toLowerCase()==='k'&&E.color(p)===game.t&&E.inCheck(game))b.classList.add('check');b.setAttribute('aria-label',E.sq(i)+' '+p);if(screenC===0)b.innerHTML=`<span class="square-label">${8-r}</span>`;if(screenR===7)b.innerHTML+=`<span class="file-label">${'abcdefgh'[c]}</span>`;if(p!=='.')b.innerHTML+=pieceSvg(p);b.onclick=()=>choose(i);boardEl.appendChild(b)}
+let status=ending?endingText(ending):roomStatus==='waiting'?'상대 플레이어를 기다리는 중':roomStatus==='ended'?'대전 종료':(game.t===1?'파랑 차례':'빨강 차례');$('turnText').textContent=status;$('turnText').className='status '+(game.t===1?'side':'side red');$('stateHint').textContent=mode==='online'?(connection?'서버에서 이동과 승리 판정을 검증 중':'연결 복구 중 — 움직임이 일시 중지됐어'):(E.inCheck(game)&&!ending?'체크! 왕을 안전하게 지켜야 해.':'선택한 기물을 초록색 칸으로 이동해.');$('resultBanner').classList.toggle('hidden',!ending);if(ending){$('resultBanner').textContent=endingText(ending);$('resultBanner').className='banner win'}$('log').innerHTML=moves.length?moves.map((x,i)=>`<div>${Math.floor(i/2)+1}${x.side===1?'.':'...'} ${x.label}</div>`).join(''):'<div>아직 움직인 기물이 없어.</div>';$('log').scrollTop=$('log').scrollHeight;
+$('undoBtn').disabled=mode==='online'||history.length<2;$('resetBtn').classList.toggle('hidden',mode==='online');$('resignBtn').classList.toggle('hidden',mode!=='online'||roomStatus!=='playing');$('rematchBtn').classList.toggle('hidden',mode!=='online'||roomStatus!=='ended');$('claimBtn').classList.toggle('hidden',!(mode==='online'&&roomStatus==='playing'&&claimable));$('roomTag').textContent=mode==='online'?(roomId?'공개방 '+roomId:'서버 접속'):'한 컴퓨터 2인';$('perspectiveTag').textContent=(redBottom?'🔴 빨강':'🔵 파랑')+' 아래';}
+function setStatus(x){$('onlineStatus').textContent=x}
+function enter(x){mode=x;$('entry').classList.add('hidden');$('play').classList.remove('hidden');$('onlinePanel').classList.toggle('hidden',mode==='local');if(mode==='online'){connect()}else{connection=true;roomStatus='local';resetLocal()}draw()}
+function resetLocal(){game=E.initial();hist=[E.key(game)];history=[game];moves=[];ending=null;selected=-1;lastMove=null;draw()}
+$('localChoice').onclick=()=>enter('local');$('onlineChoice').onclick=()=>enter('online');$('resetBtn').onclick=resetLocal;$('undoBtn').onclick=()=>{if(mode!=='local'||history.length<2)return;history.pop();hist.pop();moves.pop();game=history[history.length-1];lastMove=null;ending=null;selected=-1;draw()};$('backBtn').onclick=()=>{if(mode==='online'&&roomId){if(!confirm('현재 공개방에서 나갈까?'))return;socketSend({type:'chess_leave'})}if(sock){sock.onclose=null;sock.close();sock=null}roomId='';token='';sessionStorage.removeItem('chessToken');$('play').classList.add('hidden');$('entry').classList.remove('hidden')};$('resignBtn').onclick=()=>{if(confirm('정말 기권할까?'))socketSend({type:'chess_resign'})};$('rematchBtn').onclick=()=>socketSend({type:'chess_rematch'});$('claimBtn').onclick=()=>socketSend({type:'chess_claim'});
+function socketSend(m){if(!sock||sock.readyState!==1)return false;sock.send(JSON.stringify(m));return true}
+function connect(){if(mode!=='online')return;if(sock&&[0,1].includes(sock.readyState))return;const addr=(location.protocol==='https:'?'wss://':'ws://')+location.host+'/chess-ws';try{sock=new WebSocket(addr)}catch(e){setStatus('서버에 연결하지 못했어: '+e.message);return}sock.onopen=()=>{connection=true;connectedOnce=true;setStatus('온라인 서버 연결 성공');if(token)socketSend({type:'chess_resume',token});else socketSend({type:'chess_list'});draw()};sock.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch{return}handle(m)};sock.onclose=()=>{connection=false;setStatus(roomId?'접속 끊김: 최대 30초 동안 자동 재연결을 시도해.':'서버 연결 끊김');draw();if(mode==='online'){clearTimeout(reconnectTimer);reconnectTimer=setTimeout(connect,1100)}};sock.onerror=()=>setStatus('네트워크 연결 오류')}
+function handle(m){if(m.type==='chess_rooms'){const box=$('rooms');box.innerHTML='';for(const r of m.rooms){const d=document.createElement('div');d.className='room';const name=document.createElement('div');name.textContent=`${r.name} · ${r.count}/2명`;const b=document.createElement('button');b.textContent='참가';b.onclick=()=>socketSend({type:'chess_join',roomId:r.id,namePlayer:$('nick').value});d.append(name,b);box.append(d)}if(!m.rooms.length)box.textContent='현재 참가 가능한 공개방이 없어. 새 방을 만들어 봐.';return}
+if(m.type==='chess_joined'){roomId=m.roomId;meSide=m.side;token=m.token;sessionStorage.setItem('chessToken',token);$('joinForm').classList.add('hidden');$('roomInfo').classList.remove('hidden');setStatus((meSide===1?'파랑 선공':'빨강 후공')+'으로 참가했어.');draw();return}
+if(m.type==='chess_resume_failed'){token='';roomId='';sessionStorage.removeItem('chessToken');$('joinForm').classList.remove('hidden');$('roomInfo').classList.add('hidden');socketSend({type:'chess_list'});setStatus('기존 방이 종료되어 공개방 목록으로 돌아왔어.');return}
+if(m.type==='chess_left'){roomId='';token='';sessionStorage.removeItem('chessToken');$('joinForm').classList.remove('hidden');$('roomInfo').classList.add('hidden');socketSend({type:'chess_list'});return}
+if(m.type==='chess_state'){if(m.roomId!==roomId)return;roomStatus=m.status;roomPlayers=m.players;game={b:m.board,t:m.turn,c:m.castling,ep:m.ep,half:m.half,full:m.full};moves=m.moves;lastMove=moves.length?[E.idx(moves[moves.length-1].move.slice(0,2)),E.idx(moves[moves.length-1].move.slice(2,4))]:null;
+hist=[]; // server already decides draw claims and repetition; keep local history only for display
+ending=m.ending;claimable=!!m.claimable;selected=-1;promotions=null;$('promoPanel').classList.add('hidden');$('players').textContent=m.players.map(p=>`${p.side===1?'🔵':'🔴'} ${p.name}${p.connected?'':' (접속 끊김)'}${p.rematch?' · 재대결 준비':''}`).join('  |  ');$('roomInfo').classList.remove('hidden');$('joinForm').classList.add('hidden');setStatus(roomStatus==='waiting'?'친구가 공개방에 참가하기를 기다리는 중':roomStatus==='playing'?'대전 진행 중 · 서버 판정 활성':'대전 종료 · 재대결 가능');draw();return}
+if(m.type==='chess_error'){setStatus('⚠ '+m.message);return}}
+$('createBtn').onclick=()=>socketSend({type:'chess_create',name:$('roomName').value,namePlayer:$('nick').value});$('listBtn').onclick=()=>socketSend({type:'chess_list'});$('leaveBtn').onclick=()=>socketSend({type:'chess_leave'});
+if(location.pathname==='/chess.html'&&sessionStorage.getItem('chessToken')){token=sessionStorage.getItem('chessToken');enter('online')}
+</script></body></html>
