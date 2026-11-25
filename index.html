@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0a1123" />
+<title>Tricky Tower DUEL V10.0 | 6개 스테이지 통합</title>
+<style>
+:root{color-scheme:dark;--bg:#090e1b;--pane:#121d35;--border:#293b58;--muted:#96a5c1;--text:#eff5ff;--gold:#f9d581;--mint:#7ceacb;--blue:#77c6fd}
+*{box-sizing:border-box}html{min-height:100%;background:#090e1b}body{margin:0;color:var(--text);font-family:system-ui,-apple-system,"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:radial-gradient(ellipse at 50% 0,#223050 0,transparent 50%),linear-gradient(180deg,#0b1428,#090d1b 70%);min-height:100vh;overscroll-behavior-y:contain}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.app{max-width:1140px;margin:auto;padding:24px 22px 18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:19px}.logo{display:flex;align-items:center;gap:13px}.logo-mark{display:grid;place-items:center;width:45px;height:45px;border-radius:14px;background:linear-gradient(145deg,#675bd8,#ab6bea);box-shadow:0 8px 32px #827aff44;font-weight:950;font-size:24px;transform:rotate(-6deg)}header h1{font-size:clamp(20px,3vw,30px);letter-spacing:.04em;line-height:1;margin:0}header p{color:#a7b6d3;font-size:12px;margin:5px 0 0;letter-spacing:.08em}.header-actions{display:flex;gap:9px}.small-btn{border:1px solid #405575;background:#162441;color:#d3e5ff;border-radius:13px;min-width:43px;height:43px;padding:0 13px;font-weight:700}.small-btn:hover{background:#25395c}.layout{display:grid;grid-template-columns:minmax(0,600px) minmax(260px,330px);align-items:start;gap:22px;justify-content:center}
+.stage-frame{padding:10px;background:linear-gradient(140deg,#35466b,#17253e 22%,#111a2e 70%,#395075);border:1px solid #51658b;border-radius:25px;box-shadow:0 18px 80px #0008, inset 0 2px 2px #adcbff20;max-width:560px;margin:auto;position:relative}.stage-inner{overflow:hidden;border-radius:18px;position:relative;background:#111c34;isolation:isolate}.stage-inner canvas{display:block;width:100%;height:auto;aspect-ratio:480/700;touch-action:none;user-select:none;-webkit-user-select:none}.stage-badge{position:absolute;right:12px;bottom:13px;z-index:2;pointer-events:none;font-size:10px;background:#0813239c;padding:7px 10px;border:1px solid #ffffff2b;border-radius:100px;letter-spacing:.11em;color:#e1e9ff}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:linear-gradient(#080d22b0,#101b37b8);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);padding:22px;text-align:center}.overlay[hidden]{display:none}.overlay-content{max-width:360px;width:100%}.symbol{font-size:54px;display:block;filter:drop-shadow(0 8px 20px #ffd45b44);animation:float 3s ease-in-out infinite}@keyframes float{50%{transform:translateY(-8px)}}.overlay h2{font-size:clamp(27px,5vw,38px);line-height:1.17;margin:15px 0 10px;letter-spacing:-.045em}.overlay p{font-size:14px;line-height:1.75;color:#c1d0e9;margin:0 auto 24px}.overlay .em{color:#ffe3a1;font-weight:800}.primary{border:0;border-radius:15px;padding:15px 25px;background:linear-gradient(135deg,#ffdf94,#ffb55c);color:#342216;font-size:16px;font-weight:900;box-shadow:0 10px 29px #f3a74844;min-width:178px;transition:transform .15s,filter .15s}.primary:hover{filter:brightness(1.05);transform:translateY(-2px)}.overlay-hint{margin-top:16px;color:#a8bedb;font-size:12px}
+.sidebar{display:flex;flex-direction:column;gap:14px;padding-top:4px}.panel{background:linear-gradient(150deg,#192840ed,#121d33f2);border:1px solid #364760;border-radius:21px;padding:19px;box-shadow:0 12px 36px #00000029}.panel h3{font-size:13px;text-transform:uppercase;letter-spacing:.16em;color:#9cb0d3;font-weight:800;margin:0 0 16px}.score-hero{display:flex;align-items:end;justify-content:space-between;gap:8px;margin-bottom:16px}.score-hero strong{font-size:44px;letter-spacing:-.08em;font-variant-numeric:tabular-nums;line-height:.95}.score-hero .tag{font-size:11px;color:#ffe4a6;border:1px solid #a8865077;background:#aa87451a;border-radius:100px;padding:6px 10px;white-space:nowrap}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:12px 13px;background:#09162685;border-radius:13px;border:1px solid #2d3d55}.stat small{display:block;font-size:11px;color:#96aacb;margin-bottom:5px}.stat strong{font-size:22px;font-variant-numeric:tabular-nums}.stat strong span{color:#8599b4;font-weight:500;font-size:12px}.fall-counter{font-size:12px;color:#ffb993;padding:11px 12px;margin-top:12px;background:#371e2c6b;border:1px solid #8b515655;border-radius:11px}.fall-counter strong{font-size:14px;color:#ffcfb5;margin-left:5px}.fall-counter span{display:block;color:#9fb0ca;font-size:10px;margin-top:4px}.progress-track{height:8px;margin:16px 0 8px;background:#0b1629;border:1px solid #30405a;border-radius:100px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#75cafa,#a17eff);border-radius:100px;transition:width .3s}.progress-caption{display:flex;justify-content:space-between;color:#9bb0d1;font-size:11px}.next-box{display:flex;align-items:center;justify-content:space-between;gap:16px}.next-visual{width:116px;height:89px;background:#0917299e;border:1px solid #314764;border-radius:14px;display:grid;place-items:center}.next-visual canvas{width:110px;height:80px}.wind-icon{font-size:27px;display:block;height:32px;color:#b9e8ff;font-weight:900}.wind-label{color:#acc1df;font-size:12px;margin-top:4px}.meter-caption{display:flex;align-items:center;justify-content:space-between;margin-top:16px;color:#aec0da;font-size:12px}.meter-caption b{font-size:13px;color:#a9f5cb}.balance-track{height:7px;background:#0b1629;border-radius:20px;margin-top:9px;overflow:hidden}.balance-fill{height:100%;width:100%;background:linear-gradient(90deg,#ff8e9e,#ffe29c,#79edc4);border-radius:20px;transition:width .2s}.help{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;font-size:12px;color:#bfcee7}.help-item{display:flex;align-items:center;gap:8px}.keys{display:inline-flex;min-width:30px;height:27px;align-items:center;justify-content:center;padding:0 5px;border:1px solid #546a8e;background:#243958;border-bottom-width:3px;border-radius:7px;color:#f7fbff;font-weight:800;white-space:nowrap}.note{font-size:12px;line-height:1.7;color:#95a9c9;margin:13px 0 0}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.action-btn{padding:13px 12px;border:1px solid #4e6585;color:#d4e3ff;background:#1e3050;border-radius:13px;font-weight:800}.action-btn:hover{background:#2b4268}.mobile-controls{display:none;max-width:560px;margin:12px auto 0;gap:8px;grid-template-columns:repeat(5,minmax(0,1fr));user-select:none;-webkit-user-select:none}.control{border:1px solid #5875a4;border-bottom:3px solid #36496c;border-radius:14px;background:linear-gradient(180deg,#2b4669,#1a2c49);color:#eff6ff;min-height:61px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;touch-action:none;font-weight:900}.control:active,.control.active{transform:translateY(2px);border-bottom-width:1px;filter:brightness(1.25)}.control .glyph{font-size:22px;line-height:1}.control small{font-size:10px;color:#c3d5ee}.control.special{border-color:#c0a66b;background:linear-gradient(180deg,#735834,#40301f)}.foot{text-align:center;margin-top:22px;font-size:11px;color:#6f85a6}
+@media(max-width:850px){.app{max-width:620px;padding:14px 12px 24px}.layout{grid-template-columns:1fr;gap:14px}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:12px}.sidebar .panel:first-child{grid-column:1/3}.sidebar .panel:last-child{grid-column:1/3}.stage-frame{width:min(100%,520px)}.mobile-controls{display:grid}}
+@media(max-width:500px){header{margin-bottom:12px}.logo-mark{width:37px;height:37px;font-size:19px;border-radius:10px}.header h1{font-size:19px}header p{font-size:9px}.small-btn{min-width:37px;height:37px;padding:0 10px}.stage-frame{padding:6px;border-radius:18px}.stage-inner{border-radius:12px}.sidebar{grid-template-columns:1fr}.sidebar .panel:first-child,.sidebar .panel:last-child{grid-column:auto}.panel{padding:15px}.sidebar .panel:nth-child(3){display:none}.score-hero strong{font-size:36px}.control{min-height:56px}.control small{font-size:9px}.mobile-controls{gap:6px}}
+@media (prefers-reduced-motion:reduce){.symbol{animation:none}*{scroll-behavior:auto!important;transition:none!important}}
+/* Lobby and mode-specific widgets */
+.screen[hidden],.app[hidden],.mode-only[hidden]{display:none!important}
+.lobby{max-width:1040px;margin:0 auto;padding:clamp(24px,5vh,65px) 22px 30px;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
+.lobby-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:40px}
+.lobby-id{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:900;letter-spacing:.08em}
+.lobby-id .logo-mark{width:40px;height:40px;font-size:20px}
+.lobby-kicker{font-size:12px;color:#98bee8;font-weight:800;letter-spacing:.24em;margin:0 0 12px}
+.lobby h1{font-size:clamp(36px,6.2vw,70px);line-height:1.07;letter-spacing:-.07em;margin:0 0 16px;font-weight:950}
+.lobby h1 em{font-style:normal;color:#ffe09b}
+.lobby-sub{font-size:clamp(14px,2vw,17px);color:#acc1da;line-height:1.85;max-width:650px;margin:0 0 32px}
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.mode-card{background:linear-gradient(158deg,#20365a,#13223a 55%,#10192e);color:#eff5ff;text-align:left;padding:24px 24px 21px;border-radius:24px;border:1px solid #3c5278;box-shadow:0 15px 45px #0004;cursor:pointer;min-height:265px;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:transform .17s,border-color .17s,box-shadow .17s}
+.mode-card::before{content:'';position:absolute;right:-55px;top:-65px;width:230px;height:220px;background:radial-gradient(circle,#a6b6fb36,transparent 70%);pointer-events:none}
+.mode-card:nth-child(2)::before{background:radial-gradient(circle,#90eadb34,transparent 70%)}
+.mode-card:hover{transform:translateY(-5px);border-color:#c0caf2;box-shadow:0 21px 60px #0006}.mode-card:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.mode-head{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%}
+.mode-index{font-size:11px;letter-spacing:.12em;font-weight:900;color:#9fb5d6}
+.mode-icon{font-size:38px;filter:drop-shadow(0 3px 14px #fff3)}
+.mode-card h2{font-size:clamp(23px,3vw,31px);margin:13px 0 9px;letter-spacing:-.04em}
+.mode-card p{margin:0 0 15px;color:#bbcae3;line-height:1.7;font-size:14px}
+.mode-details{display:flex;flex-wrap:wrap;gap:7px;margin:auto 0 15px}.mode-details span{font-size:12px;color:#e5f4ff;background:#ffffff12;border:1px solid #ffffff25;border-radius:999px;padding:6px 9px}
+.mode-start{display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:13px;color:#ffdfa2}.mode-card:nth-child(2) .mode-start{color:#93f4d4}
+.lobby-footer{text-align:center;margin-top:25px;color:#859ab8;font-size:12px}
+.stage-name{color:#ffe4aa;font-size:12px;font-weight:800;letter-spacing:.04em}.stat-hint{color:#94a6c3!important;font-size:11px!important}
+.mode-stat{margin-top:11px;font-size:12px;color:#b6d1eb;border-radius:10px;background:#0b162a91;border:1px solid #344866;padding:9px 10px}
+.mode-stat b{color:#ffe3a9}.return-btn{border:1px solid #50668b;background:#1b2d4b;color:#e1edff;border-radius:12px;padding:11px 15px;font-size:12px;font-weight:800}
+.overlay-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;align-items:center}.overlay-actions .primary{min-width:150px}.overlay-actions .return-btn{padding:15px 17px}
+.mode-status{margin-top:12px;font-size:12px;color:#ffdeb1}
+@media(max-width:620px){.lobby{padding:25px 17px;justify-content:flex-start}.lobby-top{margin-bottom:33px}.modes{grid-template-columns:1fr;gap:12px}.mode-card{min-height:202px;padding:18px 20px}.mode-card h2{font-size:24px;margin:9px 0 5px}.mode-card p{font-size:13px;margin-bottom:9px}.mode-icon{font-size:30px}.lobby h1{font-size:43px}.lobby-sub{margin-bottom:22px}.header-actions{gap:6px}.stage-name{display:none}.return-btn{padding:10px}}
+
+/* Portal + real public 2-player rooms */
+.portal{max-width:1050px;margin:auto;min-height:100svh;padding:35px 20px;display:flex;flex-direction:column;justify-content:center}
+.portal .portal-top{display:flex;align-items:center;gap:11px;margin-bottom:45px;font-weight:900;letter-spacing:.12em}
+.portal h1{font-size:clamp(36px,6vw,67px);margin:0 0 12px;letter-spacing:-.07em;line-height:1.08}
+.portal-desc{color:#b9cbe4;font-size:15px;line-height:1.75;margin-bottom:26px}
+.portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.portal-option{padding:29px;border-radius:22px;border:1px solid #496286;text-align:left;background:linear-gradient(140deg,#20375b,#101b32);color:#fff;min-height:235px;transition:.16s;display:flex;flex-direction:column;gap:13px}
+.portal-option:hover{transform:translateY(-3px);border-color:#f5d58d}.portal-option .big-emoji{font-size:36px}.portal-option b{font-size:28px}.portal-option span:last-child{font-size:13px;line-height:1.65;color:#b2c9e8}
+.online{max-width:950px;margin:0 auto;padding:24px 16px 50px;min-height:100svh}
+.online-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:27px}
+.online h1{font-size:clamp(30px,5vw,47px);letter-spacing:-.045em;margin:4px 0 11px}
+.online-intro{color:#9fb8d8;line-height:1.65;font-size:14px;margin:0 0 24px}
+.online-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(265px,1fr);gap:15px}
+.online-box{padding:20px;background:#16253ded;border:1px solid #344968;border-radius:20px}
+.online-box h2{font-size:17px;margin:0 0 14px}
+.field-label{font-size:12px;color:#a7bfdf;display:block;margin:14px 0 7px;font-weight:800}
+.online input,.online select{width:100%;background:#0b172b;border:1px solid #486084;border-radius:11px;color:#eff4ff;font:inherit;padding:12px 13px;min-height:45px;outline-offset:2px}
+.online button:disabled{opacity:.45;cursor:not-allowed}
+.room-entry{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #3e5471;border-radius:13px;padding:13px;margin:8px 0;color:#fff;background:#202f48}
+.room-entry:hover{background:#304363}.room-entry strong{display:block;font-size:15px}.room-entry small{display:block;color:#a6bcda;margin-top:5px;font-size:11px}
+.room-empty{color:#93a7c2;padding:24px 6px;text-align:center;font-size:13px;line-height:1.8}
+.room-tag{background:#293e58;color:#bce7ff;padding:6px 9px;border-radius:10px;white-space:nowrap;font-size:12px}
+.status-online{display:flex;align-items:center;gap:8px;color:#aac3df;font-size:12px;margin-bottom:8px}
+.status-dot{height:9px;width:9px;border-radius:50%;background:#f0b76c;box-shadow:0 0 10px #efab6655}.status-dot.live{background:#6fe4ab;box-shadow:0 0 10px #75f2af77}
+.online-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.online-row>button{flex:1}
+.notice{font-size:12px;line-height:1.7;color:#ffc899;min-height:20px;margin-top:11px;white-space:pre-line}
+.room-person{display:flex;align-items:center;gap:13px;background:#0f1c32;padding:16px;margin:9px 0;border:1px solid #39506c;border-radius:14px}
+.room-person .avatar{display:grid;place-items:center;background:#506dac;width:43px;height:43px;border-radius:12px;font-size:22px}
+.room-person:nth-child(2) .avatar{background:#7966b0}
+.room-person strong{display:block}.room-person small{color:#9bb9dc;font-size:12px}
+.room-info{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0 20px}.room-info span{background:#263b58;border-radius:9px;padding:7px 10px;font-size:12px}
+.opponent-stage[hidden]{display:none!important}
+.opponent-stage{min-width:0;align-self:start}.opponent-heading{font-size:16px;font-weight:900;margin:4px 0 12px;color:#f2d7a0}
+.opponent-status{font-size:13px;color:#bfd0ea;background:#172743;border:1px solid #3f5676;border-radius:11px;padding:10px;margin-bottom:7px;font-variant-numeric:tabular-nums}.net-metrics{font-size:11px;color:#a6dfd2;background:#12263c;border:1px solid #325e64;border-radius:9px;padding:8px 10px;margin-bottom:11px;font-variant-numeric:tabular-nums;text-align:center}
+.app.multi .layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:1250px;gap:14px}
+.app.multi{max-width:1280px}.app.multi .sidebar{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.app.multi .sidebar .panel:nth-child(3){display:none}.app.multi .stage-frame{max-width:100%}
+.app.multi #pauseBtn,.app.multi #sidebarPause,.app.multi #restartBtn{display:none}
+.app.multi .actions{display:none}
+.app.multi .stage-inner canvas{aspect-ratio:480/700}
+.multi-hint{color:#f7c991;font-size:12px;margin-top:10px}
+@media(max-width:690px){.portal-grid,.online-grid{grid-template-columns:1fr}.portal-option{min-height:175px;padding:21px}.online-box{padding:15px}.app.multi .layout{grid-template-columns:1fr}.app.multi .sidebar{grid-column:auto;grid-template-columns:1fr}.app.multi .opponent-stage .stage-frame{max-width:370px;margin:auto}.app.multi .opponent-stage .stage-inner canvas{max-height:400px;width:100%;aspect-ratio:480/520;height:auto;object-fit:cover}.app.multi .sidebar .panel:nth-child(3){display:none}.portal .portal-top{margin-bottom:26px}}
+
+
+/* V2 DUEL — visual polish without changing room navigation */
+:root{--gold:#ffd893;--mint:#8ff2c9;--electric:#8dbaff}
+body{background:radial-gradient(ellipse 72% 38% at 82% -9%,#384c91a0,transparent 74%),radial-gradient(ellipse 58% 60% at -12% 70%,#213a5b88,transparent 75%),#080e1f;background-attachment:fixed}
+.portal,.lobby,.online{position:relative;isolation:isolate}
+.portal{max-width:1100px;padding:38px 25px 48px}
+.portal::before,.lobby::before,.online::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(#9fd1fa07 1px,transparent 1px),linear-gradient(90deg,#9fd1fa07 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(90deg,transparent,#000 35%,#000 70%,transparent)}
+.portal .portal-top{margin-bottom:31px;color:#dbe7fb}
+.portal-kicker{font-size:11px;font-weight:900;letter-spacing:.2em;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #87b9ef55;background:#263c5b91;border-radius:100px;color:#b4d4ff;margin-bottom:16px}
+.portal-kicker::before{content:'';width:7px;height:7px;border-radius:50%;background:#76f2bc;box-shadow:0 0 14px #76f2bc}
+.portal h1{font-size:clamp(42px,6.3vw,78px);max-width:660px;line-height:1.07;text-shadow:0 6px 26px #050f27}
+.portal-desc{max-width:660px;margin-bottom:23px}
+.portal-meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
+.portal-meta span{border:1px solid #a7c8f62b;background:#24375686;border-radius:999px;font-size:11px;font-weight:800;color:#bfd2ed;padding:9px 12px}
+.portal-hero{position:relative;min-height:235px}
+.hero-art{position:absolute;right:30px;top:-55px;width:260px;height:245px;filter:drop-shadow(0 25px 27px #050918b8);pointer-events:none;transform:rotate(-6deg)}
+.art-glow{position:absolute;inset:20px 15px;background:radial-gradient(circle at 52% 68%,#9669ea8a,transparent 69%);filter:blur(18px)}
+.hero-cube{position:absolute;width:47px;height:47px;border-radius:7px;border:2px solid #f4fbffb3;box-shadow:inset -7px -7px 0 #00183930,inset 4px 5px 0 #ffffff36,0 10px 13px #05091860;transform:rotate(-7deg)}
+.hero-cube.c1{left:104px;top:185px;background:#7dd0f7}.hero-cube.c2{left:151px;top:185px;background:#7dd0f7}.hero-cube.c3{left:58px;top:185px;background:#7dd0f7}
+.hero-cube.c4{left:82px;top:140px;background:#fdb86f}.hero-cube.c5{left:129px;top:140px;background:#fdb86f}.hero-cube.c6{left:129px;top:93px;background:#fdb86f}
+.hero-cube.c7{left:106px;top:46px;background:#bf96ff}.hero-cube.c8{left:153px;top:46px;background:#bf96ff}.hero-cube.c9{left:200px;top:46px;background:#bf96ff}
+.hero-cube.c10{left:153px;top:0;background:#90edc0}
+.portal-option,.mode-card,.online-box{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.portal-option{min-height:224px;padding:28px 28px 25px;gap:12px;border:1px solid #667ba386;background:linear-gradient(135deg,#273f62 0%,#19283f 53%,#111c31 100%);box-shadow:0 22px 40px #02071656,inset 0 1px 0 #c7deff22;position:relative;overflow:hidden}
+.portal-option::after{content:'↗';position:absolute;right:26px;bottom:21px;font-size:27px;color:#ffffff80;transition:transform .16s}
+.portal-option:hover::after{transform:translate(3px,-3px);color:#ffe4a0}
+.portal-option:nth-child(2){background:linear-gradient(135deg,#263e5c,#1e2849 53%,#181e3c)}
+.portal-option .big-emoji{font-size:39px;filter:drop-shadow(0 7px 13px #0005)}
+.portal-option b{font-size:27px;letter-spacing:-.045em}
+.portal-option span:last-child{font-size:13px;color:#c7d5ed;line-height:1.85}
+.mode-card{border-color:#6480a46b}
+.online-box{background:linear-gradient(140deg,#1d304eeb,#101d32ee);border:1px solid #435b7a;box-shadow:0 18px 45px #0004}
+.room-entry{transition:transform .14s,background .14s,border-color .14s}
+.room-entry:hover:not(:disabled){transform:translateY(-2px);border-color:#9dbaf5;background:#354d70}
+.room-person{border-color:#58759c80;transition:border-color .2s}
+.room-person:has(.ready){border-color:#71dfae;background:linear-gradient(90deg,#174d46,#122f46)}
+.room-person .ready{color:#8ff2c9}
+.stage-frame{box-shadow:0 23px 62px #020714b8,inset 0 2px 1px #b6d4ff25}
+.overlay{background:linear-gradient(#050c22d0,#111e3de0)}
+.overlay-content{position:relative;z-index:2;padding:16px 0}
+.overlay[data-result="win"] .overlay-content h2{color:#ffe39d;text-shadow:0 0 28px #ffca68aa}
+.overlay[data-result="loss"] .overlay-content h2{color:#ffb5b5}
+.overlay[data-result="draw"] .overlay-content h2{color:#bde9ff}
+.overlay[data-result] .overlay-content{animation:resultRise .55s cubic-bezier(.2,1.25,.3,1)}
+@keyframes resultRise{from{opacity:0;transform:translateY(27px) scale(.89)}to{opacity:1;transform:translateY(0) scale(1)}}
+.result-fx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.result-fx i{position:absolute;top:-9%;width:9px;height:14px;border-radius:2px;opacity:0;animation:confettiDrop 2.8s var(--delay) ease-in forwards;background:var(--color);left:var(--left)}
+@keyframes confettiDrop{0%{opacity:0;transform:translateY(-10px) rotate(0)}12%{opacity:1}85%{opacity:1}100%{opacity:0;transform:translateY(740px) rotate(730deg)}}
+.versus-summary{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch;margin:14px auto 18px;max-width:380px}
+.duel-row{background:#142640e8;border:1px solid #4e668a;border-radius:12px;padding:13px 7px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.duel-row.is-winner{background:#5943258e;border-color:#d5ab61}
+.duel-row b{font-size:13px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.duel-row strong{font-size:20px;color:#ffdca0;font-variant-numeric:tabular-nums}
+.duel-row small{font-size:10px;color:#b8c9e1}
+.versus-vs{font-size:15px;font-weight:1000;color:#ffb85b;align-self:center}
+.opponent-heading{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.live-pill{display:inline-flex;gap:6px;align-items:center;font-size:10px;border:1px solid #6fe0ac70;border-radius:99px;padding:5px 9px;background:#2c6b576b;color:#94f6bf;letter-spacing:.08em}
+.live-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:#81f4b9;box-shadow:0 0 9px #81f4b9}
+.live-pill.lagging{background:#503c2b;border-color:#c59b5f;color:#ffca89}
+.live-pill.lagging::before{background:#ffca89;box-shadow:none}
+#opponentStatus{font-variant-numeric:tabular-nums}
+@media(max-width:850px){.hero-art{opacity:.38;right:0;transform:scale(.86) rotate(-6deg);transform-origin:right top}}
+@media(max-width:620px){.portal{padding:25px 16px}.portal-hero{min-height:auto}.hero-art{display:none}.portal h1{font-size:43px}.portal-option{min-height:165px}.portal-meta span{font-size:10px}.portal .portal-top{margin-bottom:24px}.portal-option b{font-size:24px}}
+@media(prefers-reduced-motion:reduce){.result-fx{display:none}.overlay[data-result] .overlay-content{animation:none}}
+
+
+/* V7.1 unified three-stage homepage */
+.portal{justify-content:flex-start;max-width:1190px}
+.portal .portal-top{margin-bottom:25px}
+.portal .portal-hero{min-height:160px}
+.portal .hero-art{transform:scale(.68) rotate(-6deg);transform-origin:right top;right:8px;top:-27px}
+.stage-picker-heading{font-size:18px;margin:2px 0 14px;color:#e2edff}
+.stage-chooser-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.stage-chooser-card{border-radius:21px;border:1px solid #536c96;background:linear-gradient(145deg,#233e63,#151f37 75%);padding:21px;display:flex;flex-direction:column;min-width:0;box-shadow:0 10px 30px #0004}
+.stage-chooser-card:nth-child(2){background:linear-gradient(145deg,#264658,#152c37 75%)}
+.stage-chooser-card:nth-child(3){background:linear-gradient(145deg,#4b315f,#25203d 75%)}
+.stage-chooser-num{font-size:11px;color:#a6cef7;font-weight:900;letter-spacing:.15em}
+.stage-chooser-icon{font-size:34px;margin-top:11px}
+.stage-chooser-card h3{font-size:22px;line-height:1.2;margin:8px 0 6px;letter-spacing:-.04em}
+.stage-chooser-card p{font-size:13px;color:#bdcbe6;line-height:1.65;flex:1;margin:2px 0 15px}
+.stage-chooser-actions{display:flex;gap:7px;flex-wrap:wrap}
+.stage-chooser-actions button,.stage-chooser-link{border:none;border-radius:10px;background:#ffda92;color:#322519;padding:11px 13px;font-weight:900;font-size:12px;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:1;white-space:nowrap}
+.stage-chooser-actions .alt{background:#314763;color:#e3efff;border:1px solid #6380a4}
+.stage-chooser-actions .stage-chooser-link{background:#c5b4ff;color:#201638}
+.stage-chooser-actions button:hover,.stage-chooser-link:hover{filter:brightness(1.12)}
+.stage-legacy-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:15px;border:1px solid #3a5071;background:#101b30bc;padding:13px;border-radius:13px}
+.stage-legacy-bar span{font-size:12px;color:#aabbda;margin-right:auto}
+.stage-legacy-bar button{border:1px solid #56739d;background:#283d5d;color:#e8f3ff;border-radius:11px;padding:10px 13px;font-size:12px;font-weight:850;cursor:pointer}
+@media(max-width:860px){.stage-chooser-grid{grid-template-columns:1fr}.stage-chooser-card{min-height:0}.portal .portal-hero{min-height:130px}.stage-chooser-card p{flex:none}}
+@media(max-width:620px){.portal .hero-art{display:none}.portal .portal-hero{min-height:0}.stage-picker-heading{margin-top:5px}.stage-chooser-card{padding:16px}.stage-legacy-bar span{width:100%}}
+
+@media(min-width:861px){.stage-chooser-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+
+<section class="portal screen" id="entryScreen" aria-label="게임 모드 선택">
+ <div class="portal-top"><span class="logo-mark">▟</span> TRICKY TOWER MINI <span style="font-size:10px;color:#91b5d6">ONLINE EDITION</span></div>
+ <div class="portal-hero"><div class="portal-kicker">SEVEN STAGES · SINGLE & ONLINE</div><h1>한 블록의 차이,<br><span style="color:#ffe0a0">승부를 바꾼다.</span></h1><div class="hero-art" aria-hidden="true"><div class="art-glow"></div><div class="hero-cube c1"></div><div class="hero-cube c2"></div><div class="hero-cube c3"></div><div class="hero-cube c4"></div><div class="hero-cube c5"></div><div class="hero-cube c6"></div><div class="hero-cube c7"></div><div class="hero-cube c8"></div><div class="hero-cube c9"></div><div class="hero-cube c10"></div></div></div>
+ <p class="portal-desc">스테이지 1 · 55블록 높이 쌓기, 스테이지 2 · 타임 어택, 스테이지 3 · 체스 테트리스, 스테이지 4 · 능력자 체스, 스테이지 5 · 테트리스 배틀, 스테이지 6 · 기본 체스 VS 테트리스 체스, 스테이지 7 · 3인용 체스!<br>스테이지 6 기본 체스 VS 테트리스 체스 추가! 원하는 게임을 선택하고 공개방 멀티플레이를 시작하세요.</p><div class="portal-meta"><span>◆ 안정된 충돌 물리</span><span>◉ 상대 탑 실시간 중계</span><span>🏆 1:1 대전 결과</span><span>⚡ 공개방 빠른 참가</span></div>
+ <h2 class="stage-picker-heading">🎮 7개 스테이지 모두 선택 가능</h2>
+ <div class="stage-chooser-grid" aria-label="스테이지 선택">
+  <article class="stage-chooser-card"><span class="stage-chooser-num">STAGE 01</span><div class="stage-chooser-icon">🏰</div><h3>최고 높이 도전</h3><p>블록 <strong>55개</strong>를 사용해 최대한 높이 쌓기 · 시간 제한 없음</p><div class="stage-chooser-actions"><button type="button" id="quickStage1">혼자 시작</button><button type="button" id="quickMulti1" class="alt">2인 공개방</button></div></article>
+  <article class="stage-chooser-card"><span class="stage-chooser-num">STAGE 02</span><div class="stage-chooser-icon">⏱️</div><h3>타임 어택</h3><p>블록 무제한 · <strong>18칸 높이</strong>에 가장 빨리 도달하기</p><div class="stage-chooser-actions"><button type="button" id="quickStage2">혼자 시작</button><button type="button" id="quickMulti2" class="alt">2인 공개방</button></div></article>
+  <article class="stage-chooser-card chess-card"><span class="stage-chooser-num">STAGE 03</span><div class="stage-chooser-icon">♟️</div><h3>체스 테트리스</h3><p><strong>파랑 선공</strong> · 그림에 따른 도형 이동 · 세로 8칸 줄 완성 승리</p><div class="stage-chooser-actions"><a class="stage-chooser-link" href="/chess.html" id="quickStage3">체스 테트리스 입장 →</a></div></article>
+  <article class="stage-chooser-card chess-card" style="background:linear-gradient(130deg,rgba(44,37,92,.94),rgba(14,48,63,.94));border-color:rgba(164,122,255,.55)">
+    <span class="stage-chooser-num">STAGE 04 · NEW</span><div class="stage-chooser-icon">♛</div>
+    <h3>능력자 체스 울트라</h3><p><strong>원본 v20.40</strong> · 능력 · 특수 효과 · 2인/4인 공개방 · 방 코드 입력 없음</p>
+    <div class="stage-chooser-actions"><a class="stage-chooser-link" href="/ability_lobby.html" id="quickStage4">능력자 체스 입장 →</a></div>
+  </article>
+  <article class="stage-chooser-card" style="background:linear-gradient(135deg,#134c53,#20224b);border-color:#65e7c5">
+    <span class="stage-chooser-num">STAGE 05 · NEW</span><div class="stage-chooser-icon">⚔️</div>
+    <h3>테트리스 배틀</h3><p><strong>10×20</strong> 정규 격자 · 4색 공격 포인트 · 2인 HP 1,000 / 3인 HP 2,000 · 6종 특수 블록 · 물리 없음 · 2·3인 공개방</p>
+    <div class="stage-chooser-actions"><a class="stage-chooser-link" href="/battle.html" id="quickStage5">테트리스 배틀 입장 →</a></div>
+  </article>
+  <article class="stage-chooser-card" style="background:linear-gradient(135deg,#18355a,#49365b);border-color:#e4c57f">
+    <span class="stage-chooser-num">STAGE 06 · NEW</span><div class="stage-chooser-icon">♔ ▟</div>
+    <h3>기본 체스 VS 테트리스 체스</h3><p><strong>정통 체스</strong>와 <strong>특수 도형 체스</strong>가 1대1 대결 · 진영 선택 · 한 컴퓨터 2인/공개방 2인 · 백 선공</p>
+    <div class="stage-chooser-actions"><a class="stage-chooser-link" href="/hybrid.html" id="quickStage6">새 대결 입장 →</a></div>
+  </article>
+  <article class="stage-chooser-card chess-card" style="background:linear-gradient(135deg,#193d44,#372544);border-color:#8bcfb2">
+    <span class="stage-chooser-num">STAGE 07 · NEW</span><div class="stage-chooser-icon">♔ ♚ ♚</div>
+    <h3>3인용 체스 · THREE KINGDOMS</h3><p><strong>백 → 흑 → 빨강</strong> · 96칸 변형 판 · 중앙 분기 이동 · 체크메이트 탈락 · 로컬 3인/공개방 3인 · 60FPS·60Hz 목표</p>
+    <div class="stage-chooser-actions"><a class="stage-chooser-link" href="/three_chess.html" id="quickStage7">3인용 체스 입장 →</a></div>
+  </article>
+ </div>
+ <div class="stage-legacy-bar"><span>기존 방식으로 들어가기</span><button type="button" id="chooseSingle">🏰 싱글 스테이지 로비</button><button type="button" id="chooseMulti">🌐 공개방 전체 목록</button></div><div class="lobby-footer">데스크톱 · Android Chrome | 원작과 무관한 팬 제작 게임</div>
+</section>
+<section class="online screen" id="onlineScreen" hidden aria-label="멀티 플레이 공개방">
+ <div class="online-head"><div class="lobby-id"><div class="logo-mark">▟</div> PUBLIC LOBBY</div><button type="button" class="return-btn" id="onlineBack">← 모드 선택</button></div>
+ <h1>공개방 <span style="color:#ffe1a3">찾기</span></h1><p class="online-intro">방 번호·비밀번호 없이 목록에서 바로 참가! 각자 독립된 공간에서 같은 규칙으로 경쟁합니다. (최대 2명)</p>
+ <div class="status-online"><span id="connectionDot" class="status-dot"></span><span id="connectionText">연결 전</span></div>
+ <div class="online-grid">
+  <section class="online-box"><div class="online-row"><h2 style="margin-right:auto">열린 공개방</h2><button type="button" class="return-btn" id="refreshRooms">↻ 새로고침</button></div><div id="publicRooms"><p class="room-empty">서버를 연결하면 공개방 목록이 나타납니다.</p></div></section>
+  <section class="online-box"><h2>공개방 만들기</h2>
+   <label class="field-label" for="nickname">내 닉네임 (12자 이하)</label><input id="nickname" maxlength="12" placeholder="플레이어" autocomplete="nickname">
+   <label class="field-label" for="roomTitle">방 이름 (24자 이하)</label><input id="roomTitle" maxlength="24" value="함께 탑 쌓기" autocomplete="off">
+   <label class="field-label" for="matchStage">대결 규칙</label><select id="matchStage"><option value="height">스테이지 1 · 55블록 최고 높이</option><option value="time">스테이지 2 · 18칸 타임 어택</option></select>
+   <button type="button" class="primary" id="createRoom" style="margin-top:17px;width:100%">＋ 공개방 생성</button>
+   <details style="margin-top:18px;color:#acc2df"><summary style="font-size:12px;cursor:pointer">연결할 서버 주소</summary><label class="field-label" for="serverAddr">WebSocket 주소</label><input id="serverAddr" placeholder="ws://localhost:8787 또는 wss://..." spellcheck="false"><button type="button" id="connectServer" class="return-btn" style="margin-top:9px">서버 연결</button><p class="note">게임 서버를 실행했으면 자동 연결됩니다. 다른 서버를 사용할 때만 주소를 입력하세요.</p></details>
+   <p class="notice" id="onlineNotice"></p>
+  </section>
+ </div>
+ <div class="lobby-footer">공개방 서버를 별도로 켜야 다른 기기와 실시간 대전할 수 있어요.</div>
+</section>
+<section class="online screen" id="roomScreen" hidden aria-label="대전 대기실">
+ <div class="online-head"><div class="lobby-id"><div class="logo-mark">▟</div> MATCH ROOM</div><button type="button" class="return-btn" id="leaveRoom">← 방 나가기</button></div>
+ <p class="lobby-kicker">WAITING ROOM · 2 PLAYER</p><h1 id="waitingTitle">대결 대기실</h1><p class="online-intro">두 명 모두 준비하면 3초 카운트다운 후 자동으로 시작합니다.</p>
+ <div class="online-box" style="max-width:610px"><div class="room-info"><span id="roomModeInfo">55블록 높이 대결</span><span>최대 2인</span><span>공개 · 비밀번호 없음</span></div>
+  <div id="roomPlayers"></div>
+  <button type="button" id="readyBtn" class="primary" style="width:100%;margin-top:17px">준비하기</button>
+  <p id="waitingNote" class="notice" style="margin-top:14px">다른 플레이어를 기다리는 중...</p>
+ </div>
+</section>
+
+<section id="lobby" class="lobby screen" aria-label="게임 로비">
+ <div class="lobby-top"><button id="singleBack" type="button" class="return-btn">← 모드 선택</button><div class="lobby-id"><div class="logo-mark" aria-hidden="true">▟</div> TRICKY TOWER</div><span style="font-size:12px;color:#a7bfdc">MINI · 2D PHYSICS</span></div>
+ <p class="lobby-kicker">PICK YOUR CHALLENGE</p>
+ <h1>쌓아 올릴 준비<br><em>됐나요?</em></h1>
+ <p class="lobby-sub">정확히 8칸 넓이의 바닥에 블록을 조심히 쌓아 높은 탑을 완성하세요. 흔들림을 줄인 물리엔진으로 더 편하게 즐길 수 있어요. 원하는 스테이지를 선택하세요!</p>
+ <div class="modes">
+  <button type="button" id="selectHeight" class="mode-card" aria-label="스테이지 1: 55개 블록으로 최고 높이 도전">
+   <div class="mode-head"><span class="mode-index">STAGE 01 · HEIGHT CHALLENGE</span><span class="mode-icon" aria-hidden="true">🏰</span></div>
+   <h2>최고 높이 도전</h2><p>총 <strong>55개 블록</strong>으로 탑을 최대한 높이 쌓아 보세요. 55개를 모두 쓰면 최종 높이로 기록을 남깁니다.</p>
+   <div class="mode-details"><span>🧱 블록 55개</span><span>♾️ 시간 제한 없음</span><span id="heightRecordLobby">최고 기록 —</span></div>
+   <div class="mode-start">스테이지 시작 <span>➜</span></div>
+  </button>
+  <button type="button" id="selectTime" class="mode-card" aria-label="스테이지 2: 무제한 블록으로 18칸 높이 시간 도전">
+   <div class="mode-head"><span class="mode-index">STAGE 02 · TIME ATTACK</span><span class="mode-icon" aria-hidden="true">⏱️</span></div>
+   <h2>스피드 타워</h2><p>블록은 <strong>무제한!</strong> 최대한 빨리 <strong>18칸 높이</strong>까지 쌓아 목표를 달성하세요.</p>
+   <div class="mode-details"><span>♾️ 블록 무제한</span><span>🎯 목표 18칸</span><span id="timeRecordLobby">최고 기록 —</span></div>
+   <div class="mode-start">스테이지 시작 <span>➜</span></div>
+  </button>
+  <a href="/chess.html" id="lobbyChess" class="mode-card" style="text-decoration:none;grid-column:1/-1;min-height:170px" aria-label="스테이지 3: 체스 테트리스">
+   <div class="mode-head"><span class="mode-index">STAGE 03 · CHESS TETRIS</span><span class="mode-icon" aria-hidden="true">♟️</span></div>
+   <h2>체스 테트리스</h2><p>파랑 선공 · 테트리스 형태대로 제한된 칸 이동 · 가로/세로 완성 · 2인 공개방도 가능</p>
+   <div class="mode-start">스테이지 선택 <span>➜</span></div>
+  </a>
+  <a href="/ability_lobby.html" id="lobbyAbilityChess" class="mode-card" style="text-decoration:none;grid-column:1/-1;min-height:160px;border-color:#9072e9" aria-label="스테이지 4: 능력자 체스">
+   <span style="font-size:33px">♛</span><h2>스테이지 4 · 능력자 체스 울트라</h2>
+   <p>원본 v20.40의 모든 능력과 2인·4인 모드 · 비밀번호/방 코드 없이 공개방 선택</p>
+  </a>
+  <a href="/battle.html" class="mode-card" style="text-decoration:none;grid-column:1/-1;min-height:160px;border-color:#65e7c5" aria-label="스테이지 5: 테트리스 배틀">
+   <span style="font-size:33px">⚔️</span><h2>스테이지 5 · 테트리스 배틀</h2>
+   <p>10×20 무물리 테트리스 · 4색 공격 · 특수 블록 5종 · 30Hz 공개방 2인 대전</p>
+  </a>
+  <a href="/hybrid.html" class="mode-card" style="text-decoration:none;grid-column:1/-1;min-height:160px;border-color:#e4c57f" aria-label="스테이지 6: 기본 체스 대 테트리스 체스">
+   <span style="font-size:33px">♔ ▟</span><h2>스테이지 6 · 기본 체스 VS 체스 테트리스</h2>
+   <p>어느 진영으로 싸울지 선택 · 정통 체스와 특수 도형 체스 · 로컬/공개방 2인</p>
+  </a>
+  <a href="/three_chess.html" class="mode-card" style="text-decoration:none;grid-column:1/-1;min-height:160px;border-color:#8bcfb2" aria-label="스테이지 7: 3인용 체스">
+   <span style="font-size:33px">♔ ♚ ♚</span><h2>스테이지 7 · 3인용 체스</h2>
+   <p>96칸 3인 체스 · 백→흑→빨강 · 중앙 분기 이동 · 로컬 3인/공개방 3인</p>
+  </a>
+ </div>
+ <div class="lobby-footer">PC 키보드 · 스마트폰 터치 조작 지원 | 팬 제작 미니게임</div>
+</section>
+<div class="app" id="gameScreen" hidden>
+<header>
+  <div class="logo"><div class="logo-mark" aria-hidden="true">▟</div><div><h1>TRICKY TOWER <span style="color:#f9d581">MINI</span></h1><p>쉬워진 물리 · 3개 스테이지 선택</p></div></div>
+  <div class="header-actions"><span id="stageName" class="stage-name">STAGE 01</span><button id="homeBtn" class="small-btn" type="button" title="로비로 이동" aria-label="로비로 이동">⌂</button><button class="small-btn" id="soundBtn" type="button" title="소리 켜기/끄기" aria-label="효과음 켜기/끄기">♪</button><button class="small-btn" id="pauseBtn" type="button" title="일시정지" aria-label="일시정지">Ⅱ</button></div>
+</header>
+<main class="layout">
+  <div>
+   <div class="stage-frame"><div class="stage-inner">
+    <canvas id="game" width="480" height="700" aria-label="블록을 쌓아 목표 높이에 도달하는 게임" role="img"></canvas>
+    <div class="stage-badge" id="stageBadge">SOFT PHYSICS · CLIFFS</div>
+    <div class="overlay" id="overlay"><div class="overlay-content"><span class="symbol" id="overlayIcon">🏰</span><h2 id="overlayTitle">하늘까지 쌓아봐!</h2><p id="overlayText">블록을 움직이고 회전해서 <span class="em">18칸 높이</span>에 도달하세요.<br>바람과 물리 안정도을 조심하세요.</p><div class="overlay-actions"><button id="overlayBtn" class="primary" type="button">게임 시작</button><button id="overlayLobbyBtn" class="return-btn" type="button">로비로</button></div><div class="overlay-hint">PC · 키보드 / 모바일 · 화면 버튼</div></div></div>
+   </div></div>
+   <div class="mobile-controls" aria-label="모바일 게임 조작"><button type="button" class="control" data-action="left" aria-label="왼쪽"><span class="glyph">◀</span><small>왼쪽</small></button><button type="button" class="control" data-action="rotate" aria-label="회전"><span class="glyph">⟳</span><small>회전</small></button><button type="button" class="control" data-action="right" aria-label="오른쪽"><span class="glyph">▶</span><small>오른쪽</small></button><button type="button" class="control" data-action="down" aria-label="빠른 낙하"><span class="glyph">▼</span><small>빠르게</small></button><button type="button" class="control special" data-action="drop" aria-label="즉시 낙하"><span class="glyph">↧</span><small>즉시 낙하</small></button></div>
+  </div>
+
+  <div class="opponent-stage" id="opponentStage" hidden>
+    <div class="opponent-heading"><span>🆚 상대 플레이어 탑</span><span class="live-pill" id="remoteLive">LIVE</span></div><div class="opponent-status" id="opponentStatus">상대 경기 준비 중...</div><div class="net-metrics" id="netMetrics" aria-live="off">FPS — · 상대 수신 — Hz · RTT — ms</div>
+    <div class="stage-frame"><div class="stage-inner"><canvas id="opponentCanvas" width="480" height="700" aria-label="상대 플레이어 게임 화면"></canvas><div class="stage-badge">OPPONENT · READ ONLY</div></div></div>
+    <div class="multi-hint">상대 블록은 화면에만 표시되며 내 공간으로 넘어오지 않습니다.</div>
+  </div>
+  <aside class="sidebar">
+   <section class="panel"><h3 id="scoreTitle">STAGE 01 · 최고 높이</h3><div class="score-hero"><strong id="score">0</strong><span class="tag" id="scoreTag">🏆 기록 <span id="best">0</span></span></div><div class="stats"><div class="stat"><small>현재 높이</small><strong><span id="heightVal">0</span> <span>칸</span></strong></div><div class="stat"><small id="blockStatLabel">남은 블록</small><strong id="blocksVal">55</strong></div></div><div class="fall-counter">낭떠러지로 떨어진 블록 <strong id="fallVal">0</strong> <span>추락해도 바로 끝나지 않아요. 계속 도전!</span></div><div class="progress-track"><div class="progress-fill" id="goalProgress"></div></div><div class="progress-caption"><span id="progressLabel">블록 사용량</span><b id="goalText">0 / 55</b></div><div class="mode-stat" id="modeRecord">최고 기록: —</div></section>
+   <section class="panel"><h3>NEXT BLOCK / EASY PHYSICS</h3><div class="next-box"><div><span class="wind-icon" id="windIcon">↔</span><div class="wind-label" id="windLabel">바람 잔잔함</div></div><div class="next-visual"><canvas id="next" width="110" height="80" aria-label="다음 블록"></canvas></div></div><div class="meter-caption"><span>물리 안정도</span><b id="balanceText">안정 100%</b></div><div class="balance-track"><div class="balance-fill" id="balanceFill"></div></div></section>
+   <section class="panel"><h3>HOW TO PLAY</h3><div class="help"><div class="help-item"><span class="keys">← →</span> 이동</div><div class="help-item"><span class="keys">↑ / W</span> 회전</div><div class="help-item"><span class="keys">↓ / S</span> 빠르게</div><div class="help-item"><span class="keys">SPACE</span> 즉시 낙하</div><div class="help-item"><span class="keys">P</span> 일시정지</div><div class="help-item"><span class="keys">R</span> 다시 시작</div></div><p class="note" id="howToNote">마찰력이 높고 회전이 완화되어 이전보다 탑이 안정적이에요. 양쪽 낭떠러지는 그대로! 블록을 떨어뜨려도 즉시 게임 오버되지 않아요.</p></section>
+   <div class="actions"><button class="action-btn" type="button" id="restartBtn">↻ 다시 도전</button><button class="action-btn" type="button" id="sidebarPause">Ⅱ 잠시 멈춤</button></div><button class="return-btn" type="button" id="sidebarHome">⌂ 스테이지 선택으로 돌아가기</button>
+  </aside>
+</main><div class="foot">팬 제작 미니게임 · 원작의 공식 웹사이트가 아닙니다. 별도 설치 없이 플레이 가능</div>
+</div>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('game'), ctx=canvas.getContext('2d');
+const preview=document.getElementById('next'), pctx=preview.getContext('2d');
+const el=id=>document.getElementById(id);
+const W=480,H=700,CELL=28,GROUND=621,GOAL=18,PLATFORM_BLOCKS=8,PLAT_L=(W-PLATFORM_BLOCKS*CELL)/2,PLAT_R=PLAT_L+PLATFORM_BLOCKS*CELL;
+const FIXED=1/90,GRAVITY=780,MAX_BODIES=125,HEIGHT_BLOCKS=55;
+// Two small solver substeps reduce interpenetration, fast-step tunnelling and jitter.
+const PHYSICS_SUBSTEPS=2,CONTACT_ITERATIONS=7;
+// 0.82초였던 블록 등장 대기시간을 정확히 1.7배 단축합니다.
+const SPAWN_DELAY=.82/1.7;
+const SHAPES=[
+ {name:'I',color:'#65dff1',cells:[[0,0],[1,0],[2,0],[3,0]]},
+ {name:'O',color:'#ffd77d',cells:[[0,0],[1,0],[0,1],[1,1]]},
+ {name:'T',color:'#c997ff',cells:[[0,0],[1,0],[2,0],[1,1]]},
+ {name:'L',color:'#ffb078',cells:[[0,0],[0,1],[1,1],[2,1]]},
+ {name:'J',color:'#8cb8ff',cells:[[2,0],[0,1],[1,1],[2,1]]},
+ {name:'S',color:'#8be2a8',cells:[[1,0],[2,0],[0,1],[1,1]]},
+ {name:'Z',color:'#ff8da8',cells:[[0,0],[1,0],[1,1],[2,1]]}
+];
+const stars=Array.from({length:75},(_,i)=>({x:(i*131+79)%480,y:(i*89+23)%570,r:i%6===0?1.6:.8,p:i*.82}));
+let mode='lobby',stage='height',bodies=[],piece=null,nextShape=null,score=0,placed=0,falls=0,height=0,peakHeight=0,balance=100,bestHeight=0,bestTime=0,finishWait=-1,cameraY=0;
+let gameTime=0,canvasTime=0,wind=0,windPower=0,windTimer=0,gravityAcc=0,accumulator=0;
+// 게임 시간은 물리 시뮬레이션의 프레임 간격(dt)이 아니라 단조 증가 시계에서 계산합니다.
+// 게임 중 타이머가 일시 정지된 시간은 빼고, 프레임 드롭으로 사라진 시간을 보전합니다.
+let elapsedBeforePause=0,startedAtMs=null;
+// Single-player has a pausable monotonic clock; multiplayer derives elapsed time
+// from the shared server start instant, including across frame stalls and reconnects.
+function syncClock(){
+ if(isMultiplayer&&mode==='playing'&&serverRoundStartAt>0){
+  gameTime=Math.max(0,(serverNowEstimate()-serverRoundStartAt)/1000);return gameTime;
+ }
+ if(startedAtMs!==null)gameTime=elapsedBeforePause+Math.max(0,(performance.now()-startedAtMs)/1000);
+ return gameTime;
+}
+function stopClock(){if(isMultiplayer&&mode==='playing'&&serverRoundStartAt>0){syncClock();elapsedBeforePause=gameTime;startedAtMs=null;return}
+ if(startedAtMs!==null){syncClock();elapsedBeforePause=gameTime;startedAtMs=null}}
+function resumeClock(){if(isMultiplayer&&serverRoundStartAt>0){startedAtMs=null;gameTime=Math.max(0,(serverNowEstimate()-serverRoundStartAt)/1000);return}
+ if(startedAtMs===null)startedAtMs=performance.now()}
+function resetClock(){elapsedBeforePause=0;startedAtMs=null;gameTime=0}
+let shake=0,particles=[],texts=[],lastTs=0,nextUiRefresh=0,spawnWait=-1,winTimer=0,ghostCache=null;
+let keys=new Set(),touchSoft=false,pressTimes={},soundEnabled=false,audioCtx=null,bodyId=0;
+try{bestHeight=Number(localStorage.getItem('tricky_modes_best_height')||0)||0;bestTime=Number(localStorage.getItem('tricky_modes_best_time')||0)||0}catch{}
+function tone(freq,duration=.08,type='sine',gain=.042){if(!soundEnabled)return;try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(gain,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration)}catch{}}
+function randShape(){return SHAPES[Math.floor(Math.random()*SHAPES.length)]}
+function createBlock(shape,x,y,angle=0){const meanX=shape.cells.reduce((s,c)=>s+c[0]+.5,0)/4,meanY=shape.cells.reduce((s,c)=>s+c[1]+.5,0)/4;
+ const squares=shape.cells.map(([cx,cy])=>({x:(cx+.5-meanX)*CELL,y:(cy+.5-meanY)*CELL,hx:CELL/2,hy:CELL/2}));
+ const inertia=squares.reduce((s,r)=>s+r.x*r.x+r.y*r.y+CELL*CELL/6,0);
+ return {id:++bodyId,x,y,a:angle,vx:0,vy:0,omega:0,squares,color:shape.color,name:shape.name,mass:4,invMass:.25,invI:.42/inertia,static:false,sleep:false,sleepFor:0,supported:false,age:0,impactAt:-100,scored:false};}
+const deck={id:0,x:(PLAT_L+PLAT_R)/2,y:GROUND+17,a:0,vx:0,vy:0,omega:0,squares:[{x:0,y:0,hx:(PLAT_R-PLAT_L)/2,hy:17}],mass:Infinity,invMass:0,invI:0,static:true,sleep:true};
+function showOverlay(title,description,button,icon,handler){clearResultDecoration();el('overlayTitle').textContent=title;el('overlayText').innerHTML=description;el('overlayBtn').textContent=button;el('overlayIcon').textContent=icon;el('overlay').hidden=false;el('overlayBtn').onclick=handler}
+function hideOverlay(){clearResultDecoration();el('overlay').hidden=true}
+function clearResultDecoration(){const o=el('overlay');o.removeAttribute('data-result');o.querySelector('.result-fx')?.remove()}
+function decorateResult(kind){const o=el('overlay');o.dataset.result=kind;
+ if(kind!=='win'||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ const fx=document.createElement('div');fx.className='result-fx';
+ const colors=['#ffdf87','#8ed5ff','#ad9aff','#a8ffd1','#ff9eb6'];
+ for(let i=0;i<42;i++){const part=document.createElement('i');part.style.setProperty('--left',((i*37+13)%100)+'%');part.style.setProperty('--delay',((i*7)%18)*.07+'s');part.style.setProperty('--color',colors[i%colors.length]);fx.append(part)}o.append(fx);
+}
+function refreshLobbyRecords(){el('heightRecordLobby').textContent=bestHeight?`최고 ${bestHeight}칸`:'최고 기록 —';el('timeRecordLobby').textContent=bestTime?`최단 ${formatPrecise(bestTime)}`:'최고 기록 —'}
+ function toLobby(){if(isMultiplayer){leaveMultiplayer();return}stopClock();mode='lobby';keys.clear();touchSoft=false;piece=null;spawnWait=-1;finishWait=-1;hideOverlay();el('gameScreen').hidden=true;el('lobby').hidden=false;refreshLobbyRecords();window.scrollTo?.(0,0)}
+ function selectStage(which){stage=which;el('lobby').hidden=true;el('gameScreen').hidden=false;el('stageName').textContent=which==='height'?'STAGE 01 · HEIGHT':'STAGE 02 · TIME ATTACK';el('stageBadge').textContent=which==='height'?'55 BLOCKS · HEIGHT':'UNLIMITED · TIME ATTACK';startGame();window.scrollTo?.(0,0)}
+ function clearState(){resetClock();bodies=[];piece=null;nextShape=randShape();score=placed=falls=height=peakHeight=gameTime=canvasTime=windTimer=gravityAcc=winTimer=cameraY=0;wind=windPower=0;balance=100;spawnWait=finishWait=-1;accumulator=0;particles=[];texts=[];shake=0;keys.clear();pressTimes={};touchSoft=false;ghostCache=null;updateUI();drawPreview()}
+ function startGame(){if(isMultiplayer&&mode!=='countdown')return;clearState();mode='playing';resumeClock();hideOverlay();spawnPiece();tone(520,.13);tone(780,.11)}
+ function spawnPiece(){if(mode!=='playing'||stage==='height'&&placed>=HEIGHT_BLOCKS)return;const shape=nextShape;nextShape=randShape();const y=Math.min(65-cameraY,GROUND-(peakHeight+5)*CELL);piece=createBlock(shape,W/2,y);piece.dropSpeed=113+Math.min(55,placed*.65);piece.dropDistance=0;drawPreview();
+  if(intersectsEnvironment(piece)){piece=null;if(stage==='height')finish(true,'탑이 화면을 가득 채웠어요!');else finish(false,'블록을 생성할 공간이 없어요.');return}}
+// Axis-aligned broadphase and oriented-square SAT narrowphase.
+function geometry(b){const co=Math.cos(b.a),si=Math.sin(b.a);let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;const rects=[];
+ for(const r of b.squares){const cx=b.x+co*r.x-si*r.y,cy=b.y+si*r.x+co*r.y;
+  const radX=Math.abs(co)*r.hx+Math.abs(si)*r.hy,radY=Math.abs(si)*r.hx+Math.abs(co)*r.hy;
+  minX=Math.min(minX,cx-radX);maxX=Math.max(maxX,cx+radX);minY=Math.min(minY,cy-radY);maxY=Math.max(maxY,cy+radY);
+  rects.push({x:cx,y:cy,ux:co,uy:si,hx:r.hx,hy:r.hy});}
+ return {rects,minX,minY,maxX,maxY};}
+function dot(x,y,xx,yy){return x*xx+y*yy}
+function polygons(r){const x=r.x,y=r.y,ux=r.ux,uy=r.uy,hx=r.hx,hy=r.hy;
+ return [{x:x-ux*hx+uy*hy,y:y-uy*hx-ux*hy},{x:x+ux*hx+uy*hy,y:y+uy*hx-ux*hy},
+ {x:x+ux*hx-uy*hy,y:y+uy*hx+ux*hy},{x:x-ux*hx-uy*hy,y:y-uy*hx+ux*hy}];}
+function clipPolygon(subject, clip){let out=subject;
+ for(let i=0;i<clip.length;i++){const A=clip[i],B=clip[(i+1)%clip.length],dx=B.x-A.x,dy=B.y-A.y,input=out;out=[];
+  if(!input.length)break;let S=input[input.length-1],sd=dx*(S.y-A.y)-dy*(S.x-A.x);
+  for(const E of input){const ed=dx*(E.y-A.y)-dy*(E.x-A.x),inside=ed>=-1e-5,wasInside=sd>=-1e-5;
+   if(inside!==wasInside){const ratio=sd/(sd-ed);out.push({x:S.x+(E.x-S.x)*ratio,y:S.y+(E.y-S.y)*ratio})}
+   if(inside)out.push(E);S=E;sd=ed;}
+ }return out;}
+function satRect(ra,rb){const dx=rb.x-ra.x,dy=rb.y-ra.y;let depth=Infinity,nx=0,ny=0;
+ const axes=[[ra.ux,ra.uy],[-ra.uy,ra.ux],[rb.ux,rb.uy],[-rb.uy,rb.ux]];
+ for(const [ax,ay] of axes){const raP=ra.hx*Math.abs(ax*ra.ux+ay*ra.uy)+ra.hy*Math.abs(-ax*ra.uy+ay*ra.ux);
+  const rbP=rb.hx*Math.abs(ax*rb.ux+ay*rb.uy)+rb.hy*Math.abs(-ax*rb.uy+ay*rb.ux);
+  const dist=dx*ax+dy*ay,overlap=raP+rbP-Math.abs(dist);
+  if(overlap<=.005)return null;if(overlap<depth){depth=overlap;const s=dist>=0?1:-1;nx=ax*s;ny=ay*s;}}
+ const polygon=clipPolygon(polygons(ra),polygons(rb));if(!polygon.length)return null;
+ // Contact points are the tangent-space extrema of the actual intersection polygon.
+ const tx=-ny,ty=nx;let low=polygon[0],high=polygon[0],lo=dot(low.x,low.y,tx,ty),hi=lo;
+ for(const p of polygon){const v=dot(p.x,p.y,tx,ty);if(v<lo){lo=v;low=p}if(v>hi){hi=v;high=p}}
+ if(hi-lo>6)return [{x:low.x,y:low.y,nx,ny,depth},{x:high.x,y:high.y,nx,ny,depth}];
+ const cx=polygon.reduce((s,p)=>s+p.x,0)/polygon.length,cy=polygon.reduce((s,p)=>s+p.y,0)/polygon.length;
+ return [{x:cx,y:cy,nx,ny,depth}];}
+function contacts(a,b,ga,gb){if(ga.maxX<=gb.minX||gb.maxX<=ga.minX||ga.maxY<=gb.minY||gb.maxY<=ga.minY)return [];
+ const hits=[];for(const ra of ga.rects)for(const rb of gb.rects){const r=satRect(ra,rb);if(r)hits.push(...r)}
+ if(hits.length<=4)return hits;
+ // Drop redundant internal unit-tile contacts while preserving a wide support manifold.
+ hits.sort((p,q)=>q.depth-p.depth);const chosen=[];
+ for(const h of hits){if(chosen.every(p=>Math.hypot(p.x-h.x,p.y-h.y)>CELL*.7||p.nx*h.nx+p.ny*h.ny<.8))chosen.push(h);if(chosen.length>=4)break}
+ return chosen.length?chosen:hits.slice(0,4);}
+function intersectsEnvironment(b){const g=geometry(b);if(contacts(deck,b,geometry(deck),g).length)return true;
+ for(const t of bodies)if(contacts(t,b,geometry(t),g).length)return true;return false;}
+function move(dir){if(mode!=='playing'||!piece)return;const old=piece.x;piece.x=Math.max(26,Math.min(W-26,old+CELL*dir));
+ if(intersectsEnvironment(piece)){piece.x=old;return}tone(290,.025,'triangle',.017)}
+function rotate(){if(mode!=='playing'||!piece)return;const a=piece.a,x=piece.x,y=piece.y;if(piece.name==='O')return;
+ for(const [ox,oy] of [[0,0],[-14,0],[14,0],[-28,0],[28,0],[0,-14],[-14,-14],[14,-14]]){
+  piece.a=a+Math.PI/2;piece.x=x+ox;piece.y=y+oy;
+  if(piece.x>26&&piece.x<W-26&&!intersectsEnvironment(piece)){tone(470,.065,'triangle',.035);return;}}
+ piece.a=a;piece.x=x;piece.y=y;}
+function dropActive(pixels){if(!piece)return;let remaining=pixels;while(remaining>.01){const step=Math.min(3.5,remaining),prev=piece.y;piece.y+=step;
+  if(intersectsEnvironment(piece)){piece.y=prev;makeDynamic();return}remaining-=step;
+  if(piece.y>H+60){makeDynamic();return}}}
+function hardDrop(){if(mode!=='playing'||!piece)return;const original=piece.y;dropActive(H+120);const landingY=piece?piece.y:bodies[bodies.length-1]?.y??original;score+=Math.min(100,Math.max(0,Math.floor((landingY-original)/CELL))*2);
+ if(piece)makeDynamic();shake=Math.max(shake,3);tone(156,.13,'sawtooth',.03);updateUI()}
+function makeDynamic(){if(!piece||mode!=='playing')return;piece.vy=Math.max(60,piece.dropSpeed*.52);piece.vx=wind*windPower*2;
+ piece.sleep=false;piece.age=0;const landed=piece;bodies.push(piece);piece=null;placed++;score+=50;spawnWait=syncClock()+SPAWN_DELAY;shake=Math.max(shake,1.1);
+  // Wake nearby pieces only; remote, settled parts of the tower stay stable.
+  for(const b of bodies){if(b!==landed&&Math.abs(b.x-landed.x)<130&&Math.abs(b.y-landed.y)<85)wake(b)}
+  if(stage==='height'&&placed>=HEIGHT_BLOCKS){spawnWait=-1;finishWait=3}if(isMultiplayer)sendGameSnapshot(true);updateUI();}
+function wake(b){if(!b.static&&b.sleep){b.sleep=false;b.sleepFor=0}}
+function collisionManifolds(){const geo=new Map(),set=[deck,...bodies];for(const b of set)geo.set(b.id,geometry(b));
+ const manifolds=[];for(let i=0;i<set.length;i++)for(let j=i+1;j<set.length;j++){
+  const a=set[i],b=set[j];if((a.static||a.sleep)&&(b.static||b.sleep))continue;
+  const hit=contacts(a,b,geo.get(a.id),geo.get(b.id));if(!hit.length)continue;
+  for(const c of hit){if(c.ny<-.52)b.supported=true;if(c.ny>.52)a.supported=true;
+   if(a.sleep&&!a.static&&(c.depth>1.5||Math.abs(b.vx)+Math.abs(b.vy)>75))wake(a);
+   if(b.sleep&&!b.static&&(c.depth>1.5||Math.abs(a.vx)+Math.abs(a.vy)>75))wake(b);}
+  manifolds.push({a,b,hits:hit});}
+ return manifolds;}
+function cross(rx,ry,nx,ny){return rx*ny-ry*nx}
+function applyImpulse(a,b,px,py,cx,cy){const ia=a.sleep?0:a.invMass,ib=b.sleep?0:b.invMass;
+ if(ia){a.vx-=px*ia;a.vy-=py*ia;a.omega-=cross(cx-a.x,cy-a.y,px,py)*a.invI}
+ if(ib){b.vx+=px*ib;b.vy+=py*ib;b.omega+=cross(cx-b.x,cy-b.y,px,py)*b.invI}}
+function solveVelocity(a,b,c){let ia=a.sleep?0:a.invMass,ib=b.sleep?0:b.invMass,iiA=a.sleep?0:a.invI,iiB=b.sleep?0:b.invI;
+ if(ia+ib===0)return 0;
+ let ax=c.x-a.x,ay=c.y-a.y,bx=c.x-b.x,by=c.y-b.y;
+ let vax=a.vx-a.omega*ay,vay=a.vy+a.omega*ax,vbx=b.vx-b.omega*by,vby=b.vy+b.omega*bx;
+ let rvx=vbx-vax,rvy=vby-vay,vn=rvx*c.nx+rvy*c.ny;
+ if(vn>0)return 0;
+ const crA=cross(ax,ay,c.nx,c.ny),crB=cross(bx,by,c.nx,c.ny),den=ia+ib+crA*crA*iiA+crB*crB*iiB;
+ if(den<1e-9)return 0;
+ const bounce=0;const j=-(1+bounce)*vn/den;
+ applyImpulse(a,b,c.nx*j,c.ny*j,c.x,c.y);
+ ax=c.x-a.x;ay=c.y-a.y;bx=c.x-b.x;by=c.y-b.y;
+ rvx=(b.vx-b.omega*by)-(a.vx-a.omega*ay);rvy=(b.vy+b.omega*bx)-(a.vy+a.omega*ax);
+ const tx=-c.ny,ty=c.nx,crTA=cross(ax,ay,tx,ty),crTB=cross(bx,by,tx,ty),denT=ia+ib+crTA*crTA*iiA+crTB*crTB*iiB;
+ if(denT>1e-9){const slip=rvx*tx+rvy*ty;const jt=Math.max(-j*1.55,Math.min(j*1.55,-slip/denT));applyImpulse(a,b,tx*jt,ty*jt,c.x,c.y)}
+ return j;}
+function resolvePosition(manifold){const a=manifold.a,b=manifold.b,ia=a.sleep?0:a.invMass,ib=b.sleep?0:b.invMass;if(ia+ib===0)return;
+ const n=manifold.hits.length;for(const c of manifold.hits){const bias=Math.min(10,Math.max(0,c.depth-.32))*.62/n/(ia+ib);
+ if(ia){a.x-=c.nx*bias*ia;a.y-=c.ny*bias*ia}
+ if(ib){b.x+=c.nx*bias*ib;b.y+=c.ny*bias*ib}}
+}
+function physicsStep(dt){
+ const subDt=dt/PHYSICS_SUBSTEPS;
+ for(const b of bodies){b.age+=dt;b.supported=false}
+ for(let sub=0;sub<PHYSICS_SUBSTEPS;sub++){
+  for(const b of bodies){if(b.sleep)continue;
+   b.vy=Math.min(890,b.vy+GRAVITY*subDt);
+   if(wind&&b.y<GROUND-45)b.vx+=wind*windPower*3*subDt;
+   // Air drag is subtle, but supported pieces receive damping from surface friction.
+   b.vx*=Math.exp(-.34*subDt);
+   b.omega*=Math.exp(-1.15*subDt);
+   b.omega=Math.max(-2.6,Math.min(2.6,b.omega));
+   b.x+=b.vx*subDt;b.y+=b.vy*subDt;b.a+=b.omega*subDt;
+  }
+  const manifolds=collisionManifolds();let biggest=0,at=null;
+  for(let iteration=0;iteration<CONTACT_ITERATIONS;iteration++)for(const m of manifolds)for(const c of m.hits){
+   const j=solveVelocity(m.a,m.b,c);if(j>biggest){biggest=j;at={c,m}}
+  }
+  for(const m of manifolds)resolvePosition(m);
+  // Refresh contacts once after correcting positions, to reduce pile-up jitter.
+  const remaining=collisionManifolds();
+  for(const m of remaining)resolvePosition(m);
+  if(at&&biggest>28){const b=at.m.b.static?at.m.a:at.m.b;
+   if(gameTime-b.impactAt>.16){b.impactAt=gameTime;spawnParticles(at.c.x,at.c.y,b.color,Math.min(12,3+Math.floor(biggest/22)));shake=Math.max(shake,Math.min(1.6,biggest/150));if(biggest>100)tone(Math.max(105,360-biggest),.055,'triangle',.02)}
+  }
+ }
+ for(const b of bodies){if(b.sleep)continue;
+  // A settled supported block stops microscopically vibrating without being glued to the tower.
+  if(b.supported){b.vx*=Math.exp(-1.9*dt);b.omega*=Math.exp(-1.65*dt)}
+  const quiet=Math.hypot(b.vx,b.vy)<10&&Math.abs(b.omega)<.095;
+  if(quiet&&b.supported)b.sleepFor+=dt;else b.sleepFor=0;
+  if(b.sleepFor>.6){b.sleep=true;b.vx=b.vy=b.omega=0}
+ }
+ for(let i=bodies.length-1;i>=0;i--){const b=bodies[i];if(b.y>H+130||b.x< -180||b.x>W+180){bodies.splice(i,1);for(const other of bodies){if(other.sleep&&Math.abs(other.x-b.x)<110&&other.y<b.y&&b.y-other.y<340)wake(other)}falls++;shake=Math.max(shake,2);showText('낭떠러지 추락!',b.x<0?88:b.x>W?390:W/2,GROUND-100,'#ffbb9e');tone(115,.12,'triangle',.025)}}
+}
+function spawnParticles(x,y,color,n=12){for(let i=0;i<n&&particles.length<250;i++){const angle=Math.random()*Math.PI*2,speed=25+Math.random()*95;
+ particles.push({x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed-40,life:1,max:.38+Math.random()*.43,r:1+Math.random()*2.2,color})}}
+function showText(str,x,y,color){texts.push({str,x:Math.min(W-92,Math.max(92,x)),y,color,life:1})}
+function calcState(){const tower=bodies.filter(b=>b.y<GROUND+20&&b.x>PLAT_L-80&&b.x<PLAT_R+80&&b.age>.18);
+ let minY=GROUND,total=0,mx=0;
+ for(const b of tower){const g=geometry(b);if(g.minY<minY&&b.age>.38&&(b.sleep||(b.supported&&Math.abs(b.vy)<32&&Math.abs(b.omega)<1)))minY=g.minY;total+=b.mass;mx+=b.x*b.mass}
+ height=Math.max(0,Math.ceil((GROUND-minY)/CELL));if(height>peakHeight){score+=(height-peakHeight)*16;peakHeight=height;}
+ if(!tower.length){balance=100;return}
+ const com=mx/(total||1),off=Math.abs(com-(PLAT_L+PLAT_R)/2)/((PLAT_R-PLAT_L)/2);
+ const tilting=tower.reduce((s,b)=>s+Math.min(4,Math.abs(b.omega)*5),0)/Math.max(1,tower.length);
+ const speed=tower.reduce((s,b)=>s+Math.min(4,Math.hypot(b.vx,b.vy)/100),0)/Math.max(1,tower.length);
+ balance=Math.round(Math.max(0,Math.min(100,100-55*Math.max(0,off-.12)-16*tilting-12*speed)));
+}
+function changeWind(){wind=Math.random()<.55?0:(Math.random()<.5?-1:1);windPower=wind?1:0;windTimer=0;updateUI()}
+function updateUI(){
+ const isHeight=stage==='height',remaining=Math.max(0,HEIGHT_BLOCKS-placed);
+ el('scoreTitle').textContent=isHeight?'STAGE 01 · 최고 높이':'STAGE 02 · 타임 어택';
+ el('score').textContent=isHeight?`${height}칸`:formatPrecise(gameTime);
+ el('scoreTag').innerHTML=isHeight?'🏆 최고 <span id="best"></span>':'⏱ 최단 <span id="best"></span>';
+ el('best').textContent=isHeight?(bestHeight?bestHeight+'칸':'—'):(bestTime?formatPrecise(bestTime):'—');
+ el('blockStatLabel').textContent=isHeight?'남은 블록':'사용한 블록';
+ el('blocksVal').textContent=isHeight?remaining:'∞ ('+placed+'개)';el('heightVal').textContent=height;
+ el('goalText').textContent=isHeight?`${placed} / ${HEIGHT_BLOCKS}`:`${height} / ${GOAL}칸`;
+ el('goalProgress').style.width=Math.min(100,isHeight?placed/HEIGHT_BLOCKS*100:height/GOAL*100)+'%';
+ el('progressLabel').textContent=isHeight?'블록 사용량':'목표 높이 달성';
+ el('modeRecord').textContent=isHeight?`기록은 마지막 블록을 쌓은 후의 높이로 결정돼요.`:`목표 높이 ${GOAL}칸 · 최대한 빠르게 도달하세요.`;
+ el('windIcon').textContent=wind===-1?'⇠':wind===1?'⇢':'↔';el('windLabel').textContent=wind===0?'바람 잔잔함':`${wind===-1?'왼쪽':'오른쪽'} 미풍`;
+ el('balanceText').textContent=(balance>=72?'안정 ':balance>=38?'주의 ':'위험 ')+balance+'%';el('balanceText').style.color=balance>=72?'#a9f5cb':balance>=38?'#ffe29c':'#ff9cae';
+ el('balanceFill').style.width=balance+'%';el('pauseBtn').textContent=mode==='paused'?'▶':'Ⅱ';el('sidebarPause').textContent=mode==='paused'?'▶ 계속하기':'Ⅱ 잠시 멈춤';
+ el('fallVal').textContent=String(falls);
+}
+function finish(win,why){if(mode!=='playing')return;if(isMultiplayer){finishMultiplayer(win);return}stopClock();mode=win?'won':'lost';keys.clear();touchSoft=false;piece=null;
+ for(const c of document.querySelectorAll('.control'))c.classList.remove('active');
+ const isHeight=stage==='height';let title,description,icon;
+ if(isHeight){const result=height;if(result>bestHeight){bestHeight=result;try{localStorage.setItem('tricky_modes_best_height',String(bestHeight))}catch{}}title='🏆 높이 도전 완료!';icon='🏰';description=`<span class="em">${placed}개 블록</span>으로 <span class="em">${result}칸</span> 높이를 쌓았어요!<br>다시 도전해서 최고 기록을 넘어 보세요.`}
+ else if(win){if(!bestTime||gameTime<bestTime){bestTime=gameTime;try{localStorage.setItem('tricky_modes_best_time',String(bestTime))}catch{}}title='⏱ 목표 높이 달성!';icon='🎉';description=`<span class="em">${GOAL}칸</span> 높이까지 <span class="em">${formatPrecise(gameTime)}</span>에 도달했어요!<br>최단 기록에 도전하세요.`}
+ else{title='다시 도전!';icon='💫';description=why||'목표 높이에 도달하지 못했어요.'}
+ refreshLobbyRecords();updateUI();tone(win?720:170,.18);showOverlay(title,description,'다시 도전',icon,startGame);decorateResult(win?'win':'loss')
+}
+function togglePause(){if(isMultiplayer)return;if(mode==='playing'){stopClock();mode='paused';keys.clear();touchSoft=false;showOverlay('일시정지','게임 시간과 블록 움직임을 잠시 멈췄어요.','계속하기','⏸️',()=>{mode='playing';resumeClock();hideOverlay();updateUI()})}else if(mode==='paused'){mode='playing';resumeClock();hideOverlay()}updateUI()}
+function roundRect(c,x,y,w,h,r){if(typeof c.roundRect==='function'){c.beginPath();c.roundRect(x,y,w,h,r)}else{c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x+r,y);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath()}}
+function tile(c,x,y,size,color,alpha=1,outline=false){if(outline){c.save();c.strokeStyle=color;c.globalAlpha=alpha;c.lineWidth=2;c.setLineDash([5,4]);c.strokeRect(x+2,y+2,size-4,size-4);c.restore();return}
+ c.save();c.globalAlpha=alpha;c.fillStyle='#061020';roundRect(c,x+.7,y+.8,size-1.4,size-1.4,3.3);c.fill();c.fillStyle=color;roundRect(c,x+1.4,y+1.4,size-2.8,size-2.8,3.3);c.fill();c.fillStyle='#ffffff55';roundRect(c,x+3,y+2.3,size-6,size*.16,2);c.fill();c.fillStyle='#07132644';roundRect(c,x+3,y+size*.78,size-6,size*.11,2);c.fill();c.strokeStyle='#ffffff5c';c.lineWidth=.8;roundRect(c,x+2,y+2,size-4,size-4,3);c.stroke();c.restore()}
+function drawPreview(){pctx.clearRect(0,0,110,80);if(!nextShape)return;const cells=nextShape.cells,w=Math.max(...cells.map(c=>c[0]))+1,h=Math.max(...cells.map(c=>c[1]))+1,s=20,x=(110-w*s)/2,y=(80-h*s)/2;
+ for(const [cx,cy] of cells)tile(pctx,x+cx*s,y+cy*s,s,nextShape.color)}
+function drawBody(b,alpha=1,outline=false){ctx.save();ctx.translate(b.x,b.y);ctx.rotate(b.a);
+ for(const r of b.squares)tile(ctx,r.x-r.hx,r.y-r.hy,r.hx*2,b.color,alpha,outline);ctx.restore()}
+// Cache static sky gradients and the moon once. Only animated stars redraw per frame.
+const skyBackdrop=document.createElement('canvas');skyBackdrop.width=W;skyBackdrop.height=H;
+(function buildSkyBackdrop(){const c=skyBackdrop.getContext('2d');
+ const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#172956');g.addColorStop(.62,'#1d3159');g.addColorStop(1,'#08101e');c.fillStyle=g;c.fillRect(0,0,W,H);
+ const glow=c.createRadialGradient(390,108,4,390,108,215);glow.addColorStop(0,'#ccd1ff2f');glow.addColorStop(1,'#cbd3ff00');c.fillStyle=glow;c.fillRect(0,0,W,H);
+ c.fillStyle='#e5eaff';c.globalAlpha=.14;c.beginPath();c.arc(388,110,39,0,Math.PI*2);c.fill();c.globalAlpha=1;
+})();
+function drawSky(){ctx.drawImage(skyBackdrop,0,0);
+ for(const s of stars){ctx.globalAlpha=.23+.23*Math.sin(canvasTime*.5+s.p)**2;ctx.fillStyle='#e6efff';ctx.fillRect(s.x,s.y,s.r,s.r)}ctx.globalAlpha=1;
+}
+function drawPlatformTiles(c){
+ // Exactly 8 unit cells, with the SAME CELL constant used by the tetriminoes and physics deck.
+ c.save();c.shadowColor='#0009';c.shadowBlur=11;
+ for(let i=0;i<PLATFORM_BLOCKS;i++){
+  const x=PLAT_L+i*CELL;
+  const fill=c.createLinearGradient(0,GROUND,0,GROUND+CELL);
+  fill.addColorStop(0,i%2===0?'#a5b9d8':'#90abc9');fill.addColorStop(.23,'#647d9e');fill.addColorStop(1,'#283b59');
+  c.fillStyle=fill;c.fillRect(x,GROUND,CELL,CELL);
+  c.fillStyle='#deecff';c.fillRect(x+1,GROUND+1,CELL-2,3);
+  c.strokeStyle='#182b49';c.lineWidth=1.4;c.strokeRect(x+.7,GROUND+.7,CELL-1.4,CELL-1.4);
+  c.fillStyle='#a3bfe17a';c.fillRect(x+6,GROUND+17,CELL-12,3);
+ }
+ c.restore();c.fillStyle='#e0edff';c.textAlign='center';c.font='800 11px system-ui';
+ c.fillText('8 BLOCKS',W/2,GROUND+CELL+16);
+}
+function drawBackground(){ ctx.fillStyle='#182544';ctx.beginPath();ctx.moveTo(0,495);ctx.lineTo(50,451);ctx.lineTo(125,495);ctx.lineTo(206,420);ctx.lineTo(274,475);ctx.lineTo(344,427);ctx.lineTo(420,488);ctx.lineTo(W,453);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+ ctx.fillStyle='#111d36';ctx.beginPath();ctx.moveTo(0,542);ctx.lineTo(92,492);ctx.lineTo(180,540);ctx.lineTo(266,477);ctx.lineTo(382,532);ctx.lineTo(W,474);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+ // Dashed physical goal line.
+ if(stage==='time'){const line=GROUND-GOAL*CELL;ctx.save();ctx.setLineDash([7,7]);ctx.lineWidth=1.7;ctx.strokeStyle='#fbd39caa';ctx.beginPath();ctx.moveTo(55,line);ctx.lineTo(425,line);ctx.stroke();ctx.restore();ctx.fillStyle='#ffe4a9';ctx.textAlign='right';ctx.font='800 11px system-ui';ctx.fillText('GOAL 18',423,line-8)}
+ // The air above the ravine remains open: there are no side walls.
+ ctx.fillStyle='#0a1528d9';ctx.fillRect(0,GROUND,PLAT_L,H-GROUND);ctx.fillRect(PLAT_R,GROUND,W-PLAT_R,H-GROUND);
+ for(let i=0;i<2;i++){const x=i===0?PLAT_L-17:PLAT_R+17;const fog=ctx.createLinearGradient(x,GROUND,x,H);fog.addColorStop(0,'#674f8f3a');fog.addColorStop(1,'#06102300');ctx.fillStyle=fog;ctx.fillRect(i===0?0:PLAT_R,GROUND,i===0?PLAT_L:W-PLAT_R,H-GROUND)}
+ ctx.strokeStyle='#9bb5ec20';ctx.lineWidth=1;for(let i=0;i<8;i++){const x=i<4?20+i*26:PLAT_R+11+(i-4)*27;ctx.beginPath();ctx.moveTo(x,GROUND+15);ctx.lineTo(x-8,H);ctx.stroke()}
+ // Thick floating stone platform, with visibly unprotected cliff edges.
+ drawPlatformTiles(ctx);
+ ctx.fillStyle='#ffc078';ctx.font='900 15px system-ui';ctx.textAlign='center';ctx.fillText('⚠',PLAT_L-13,GROUND-6);ctx.fillText('⚠',PLAT_R+13,GROUND-6);
+ ctx.strokeStyle='#ffb17a99';ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(PLAT_L-2,GROUND+5);ctx.lineTo(PLAT_L-2,H);ctx.moveTo(PLAT_R+2,GROUND+5);ctx.lineTo(PLAT_R+2,H);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle='#fff1';ctx.font='900 11px system-ui';ctx.textAlign='center';ctx.fillText('낭떠러지',60,GROUND+57);ctx.fillText('낭떠러지',420,GROUND+57);
+ 
+}
+function formatTime(t){const s=Math.floor(t);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function formatPrecise(t){return formatTime(t)+'.'+String(Math.floor(t*100+1e-8)%100).padStart(2,'0')}
+function drawWorld(){for(const b of bodies)drawBody(b);
+ if(piece&&mode==='playing'){
+  if(!ghostCache||ghostCache.id!==piece.id||ghostCache.x!==piece.x||ghostCache.a!==piece.a||Math.abs(ghostCache.startY-piece.y)>16||canvasTime-ghostCache.time>.095){
+   const ghost={...piece},start=piece.y;let found=false;
+   for(let y=start;y<H+105;y+=5){ghost.y=y;if(intersectsEnvironment(ghost)){ghost.y=y-5;found=true;break}}
+   ghostCache={id:piece.id,x:piece.x,a:piece.a,startY:piece.y,time:canvasTime,y:ghost.y,found};
+  }
+  if(ghostCache.found&&ghostCache.y>piece.y+12){const ghost={...piece,y:ghostCache.y};drawBody(ghost,.37,true)}
+  drawBody(piece);}}
+function drawParticles(dt){ctx.save();for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.life-=dt/p.max;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=140*dt;
+ if(p.life<=0){particles.splice(i,1);continue}ctx.globalAlpha=p.life;ctx.fillStyle=p.color;ctx.fillRect(p.x-p.r/2,p.y-p.r/2,p.r,p.r)}ctx.restore();
+ ctx.save();for(let i=texts.length-1;i>=0;i--){const t=texts[i];t.life-=dt*.85;t.y-=dt*27;if(t.life<=0){texts.splice(i,1);continue}ctx.globalAlpha=t.life;ctx.font='900 17px system-ui';ctx.textAlign='center';ctx.fillStyle=t.color;ctx.shadowColor='#000';ctx.shadowBlur=5;ctx.fillText(t.str,t.x,t.y)}ctx.restore()}
+function render(dt){ctx.save();ctx.clearRect(0,0,W,H);drawSky();ctx.save();if(shake>0){ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake=Math.max(0,shake-dt*30)}
+  ctx.translate(0,cameraY);drawBackground();drawWorld();drawParticles(mode==='playing'?dt:0);ctx.restore();
+  ctx.fillStyle='#d3e0ffb0';ctx.font='700 12px system-ui';ctx.textAlign='left';ctx.fillText((isMultiplayer?'P1 · ':'')+(stage==='height'?'55 BLOCK CHALLENGE':'TIME ATTACK'),16,25);ctx.textAlign='right';ctx.fillText(formatPrecise(gameTime),464,25);
+  ctx.font='800 12px system-ui';ctx.fillStyle=falls>0?'#ffb59a':'#b4ceef';ctx.fillText('추락 '+falls,462,45);
+  if(mode==='playing'&&wind){ctx.globalAlpha=.5+.32*Math.sin(canvasTime*2.8);ctx.font='900 26px system-ui';ctx.textAlign='center';ctx.fillStyle='#a4dcff';ctx.fillText(wind<0?'⇠':'⇢',wind<0?28:W-28,150);ctx.globalAlpha=1}ctx.restore()}
+function update(dt){canvasTime+=dt;if(mode!=='playing')return;
+ windTimer+=dt;if(windTimer>12)changeWind();
+ if(piece){const left=keys.has('ArrowLeft')||keys.has('KeyA'),right=keys.has('ArrowRight')||keys.has('KeyD');
+  if(left&&!right)heldMovement('left',dt);if(right&&!left)heldMovement('right',dt);
+  if(wind){gravityAcc+=dt*windPower*.06;if(gravityAcc>=1){gravityAcc-=1;move(wind)}}else gravityAcc=0;
+  const down=keys.has('ArrowDown')||keys.has('KeyS')||touchSoft;dropActive(dt*(down?600:piece.dropSpeed));if(down)score+=Math.floor(dt*12);}
+ accumulator=Math.min(.14,accumulator+dt);let steps=0;
+ while(accumulator>=FIXED&&steps++<13){physicsStep(FIXED);accumulator-=FIXED;if(mode!=='playing')return}
+ if(spawnWait>=0&&gameTime>=spawnWait){spawnWait=-1;spawnPiece()}
+  calcState();const cameraTarget=Math.max(0,230-(GROUND-peakHeight*CELL));cameraY+=(cameraTarget-cameraY)*Math.min(1,dt*5);
+  if(stage==='height'){
+   if(finishWait>=0){finishWait-=dt;if(finishWait<=0){finishWait=-1;finish(true,'55개 사용 완료');return}}
+  } else {if(height>=GOAL&&bodies.some(b=>b.y<GROUND-GOAL*CELL+65&&b.age>.38&&(b.sleepFor>.08||b.sleep)))winTimer+=dt;else winTimer=0;
+   if(winTimer>=.55){score+=400;finish(true,'목표 높이 달성');return}}
+  if(gameTime>=nextUiRefresh){nextUiRefresh=gameTime+.12;updateUI()}}
+function heldMovement(side,dt){const o=pressTimes[side]||(pressTimes[side]={time:0,repeat:0});o.time+=dt;if(o.time>.16){o.repeat+=dt;while(o.repeat>.089){o.repeat-=.089;move(side==='left'?-1:1)}}}
+function releaseMove(side){pressTimes[side]={time:0,repeat:0}}
+const recognized=new Set(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','KeyA','KeyD','KeyW','KeyS','KeyP','KeyR','Escape']);
+document.addEventListener('keydown',e=>{if(recognized.has(e.code))e.preventDefault();if(e.code==='KeyP'||e.code==='Escape'){if(!e.repeat&&(mode==='playing'||mode==='paused'))togglePause();return}if(e.code==='KeyR'){if(!e.repeat&&!isMultiplayer&&mode!=='lobby')startGame();return}
+ if(mode!=='playing')return;if(!e.repeat){if(e.code==='ArrowLeft'||e.code==='KeyA'){move(-1);releaseMove('left')}if(e.code==='ArrowRight'||e.code==='KeyD'){move(1);releaseMove('right')}if(e.code==='ArrowUp'||e.code==='KeyW')rotate();if(e.code==='Space')hardDrop()}keys.add(e.code)});
+document.addEventListener('keyup',e=>{keys.delete(e.code);if(['ArrowLeft','KeyA'].includes(e.code))releaseMove('left');if(['ArrowRight','KeyD'].includes(e.code))releaseMove('right')});
+const timers=new Map();for(const btn of document.querySelectorAll('[data-action]')){const action=btn.dataset.action;
+ function doAction(){if(action==='left')move(-1);else if(action==='right')move(1);else if(action==='rotate')rotate();else if(action==='drop')hardDrop()}
+ function cancel(){btn.classList.remove('active');if(timers.has(btn)){clearTimeout(timers.get(btn).delay);clearInterval(timers.get(btn).interval);timers.delete(btn)}if(action==='down')touchSoft=false}
+ btn.addEventListener('pointerdown',e=>{e.preventDefault();if(mode!=='playing')return;cancel();btn.classList.add('active');try{btn.setPointerCapture(e.pointerId)}catch{}
+  if(action==='down')touchSoft=true;else{doAction();if(action==='left'||action==='right'){const held={delay:null,interval:null};held.delay=setTimeout(()=>{held.interval=setInterval(doAction,88)},170);timers.set(btn,held)}}});
+ for(const name of ['pointerup','pointercancel','lostpointercapture'])btn.addEventListener(name,cancel)}
+window.addEventListener('blur',()=>{keys.clear();touchSoft=false;for(const n of document.querySelectorAll('.control'))n.classList.remove('active');if(mode==='playing')togglePause()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='playing')togglePause()});
+el('overlayBtn').onclick=startGame;el('overlayLobbyBtn').onclick=toLobby;el('selectHeight').onclick=()=>selectStage('height');el('selectTime').onclick=()=>selectStage('time');el('homeBtn').onclick=toLobby;el('sidebarHome').onclick=toLobby;
+ el('restartBtn').onclick=startGame;el('pauseBtn').onclick=togglePause;el('sidebarPause').onclick=togglePause;
+el('soundBtn').onclick=()=>{soundEnabled=!soundEnabled;el('soundBtn').textContent=soundEnabled?'♫':'♪';el('soundBtn').title=soundEnabled?'효과음 끄기':'효과음 켜기';tone(660,.09)};
+
+// -------- Networking: server-backed public room listing, never transfers physical blocks --------
+let isMultiplayer=false,socket=null,roomId=null,clientId=null,roomState=null,ready=false;
+function multiplayerControls(active){
+ for(const id of ['pauseBtn','sidebarPause','restartBtn']){
+  const btn=el(id);btn.disabled=active;
+  btn.title=active?'온라인 대전 중에는 중지하거나 다시 시작할 수 없습니다.':'';
+ }
+}
+const SNAPSHOT_INTERVAL_MS=50; // 20 snapshots/second target. Independent of the display's refresh rate.
+let clockOffsetMs=null,clockRttMs=null,lastClockProbeAt=0;
+const clockSamples=[];
+function serverNowEstimate(){return performance.now()+(clockOffsetMs??(Date.now()-performance.now()))}
+function updateClockEstimate(m){
+ const recv=performance.now(),sent=Number(m.at),srv=Number(m.serverNow);
+ if(!Number.isFinite(sent)||!Number.isFinite(srv))return;
+ const rtt=recv-sent;if(rtt<0||rtt>4000)return;
+ clockSamples.push({rtt,offset:srv-(sent+recv)/2});
+ if(clockSamples.length>12)clockSamples.shift();
+ const best=clockSamples.reduce((a,b)=>b.rtt<a.rtt?b:a);
+ clockOffsetMs=clockOffsetMs===null?best.offset:(clockOffsetMs*.65+best.offset*.35);
+ clockRttMs=Math.round(rtt);
+}
+function requestClockProbe(force=false){
+ if(socket?.readyState!==WebSocket.OPEN)return;
+ const at=performance.now();if(!force&&at-lastClockProbeAt<4500)return;
+ lastClockProbeAt=at;sendOnline({type:'clock_probe',at});
+}
+// This lightweight heartbeat also runs on waiting-room screens without rendering a game.
+setInterval(()=>requestClockProbe(),5000);
+let sessionToken=null,reconnecting=false,reconnectTimer=null,reconnectDeadline=0,reconnectPrevMode=null;
+function cancelRecovery(){reconnecting=false;clearTimeout(reconnectTimer);reconnectTimer=null;reconnectPrevMode=null}
+function recoveryFailed(){
+ const wasPlaying=isMultiplayer;cancelRecovery();sessionToken=null;roomId=null;roomState=null;
+ if(wasPlaying){multiDisconnected()}else{showOnline();notice('재접속 유예시간이 끝났습니다. 공개방에 다시 참가하세요.')}
+}
+function retryRecovery(){
+ if(!reconnecting)return;
+ if(performance.now()>reconnectDeadline){recoveryFailed();return}
+ clearTimeout(reconnectTimer);
+ reconnectTimer=setTimeout(()=>connectOnline(true),Math.min(4500,850+(reconnectDeadline-performance.now())/12));
+}
+function beginRecovery(){
+ if(!sessionToken||!roomId){multiDisconnected();return}
+ if(!reconnecting){
+  reconnecting=true;reconnectDeadline=performance.now()+26000;reconnectPrevMode=mode;
+  if(isMultiplayer){stopClock();mode='reconnecting';keys.clear();touchSoft=false;
+   showOverlay('연결 복구 중','네트워크가 잠시 끊겼습니다. 자동 재접속 중이며 경기 시간은 계속 흐릅니다.','복구 대기 중','📡',()=>{});
+   el('overlayBtn').disabled=true;
+  }else if(!el('roomScreen').hidden){el('waitingNote').textContent='연결 복구 중… 잠시만 기다려 주세요.'}
+ }
+ retryRecovery();
+}
+let remoteSnapshot=null,remoteFrames=[],remoteStatusText='상대 대기 중',lastSnapshotAt=0,lastPublishedAt=0,serverRoundStartAt=0,multiFinished=false;
+const snapshotArrivalTimes=[];
+let fpsCount=0,lastFpsAt=0,displayedFps=0;
+function updatePerformanceHud(ts){
+ fpsCount++;
+ if(!lastFpsAt)lastFpsAt=ts;
+ if(ts-lastFpsAt<1000)return;
+ displayedFps=Math.round(fpsCount*1000/(ts-lastFpsAt));fpsCount=0;lastFpsAt=ts;
+ while(snapshotArrivalTimes.length&&ts-snapshotArrivalTimes[0]>1000)snapshotArrivalTimes.shift();
+ const hz=snapshotArrivalTimes.length,age=lastSnapshotAt?Math.round(ts-lastSnapshotAt):null;
+ el('netMetrics').textContent=`FPS ${displayedFps} · 상대 ${hz} Hz · RTT ${clockRttMs??'—'} ms${age!==null&&age>750?' · 지연 '+age+'ms':''}`;
+}
+const remoteCanvas=el('opponentCanvas'),remoteCtx=remoteCanvas.getContext('2d');
+const remoteBackdrop=document.createElement('canvas');remoteBackdrop.width=W;remoteBackdrop.height=H;
+const backCtx=remoteBackdrop.getContext('2d');
+(function buildRemoteBackdrop(){
+ const c=backCtx,g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#1a335f');g.addColorStop(.6,'#1c2b4b');g.addColorStop(1,'#091329');c.fillStyle=g;c.fillRect(0,0,W,H);
+ const glow=c.createRadialGradient(390,110,10,390,110,200);glow.addColorStop(0,'#a8b8ff2d');glow.addColorStop(1,'#11183100');c.fillStyle=glow;c.fillRect(0,0,W,H);
+ c.fillStyle='#b6d9ff';for(let i=0;i<34;i++)c.fillRect((i*113+28)%W,(i*59+18)%390,1.1,1.1);
+})();
+const showOnly=id=>{for(const n of ['entryScreen','lobby','onlineScreen','roomScreen','gameScreen'])el(n).hidden=n!==id};
+function showEntry(){multiplayerControls(false);stopClock();if(isMultiplayer)leaveMultiplayer(false);mode='lobby';showOnly('entryScreen');el('gameScreen').classList.remove('multi');}
+function showSingleLobby(){multiplayerControls(false);mode='lobby';showOnly('lobby');refreshLobbyRecords()}
+function networkURL(){const custom=el('serverAddr').value.trim();if(custom)return custom;
+ if(location.protocol==='https:')return 'wss://'+location.host;
+ if(location.protocol==='http:')return 'ws://'+location.host;
+ return 'ws://localhost:8787';}
+function setConnectionStatus(text,connected=false){el('connectionText').textContent=text;el('connectionDot').classList.toggle('live',connected)}
+function notice(text){el('onlineNotice').textContent=text}
+function sendOnline(obj){if(socket?.readyState===WebSocket.OPEN){socket.send(JSON.stringify(obj));return true}notice('서버에 연결되지 않았습니다. 서버를 실행한 뒤 연결하세요.');return false}
+function connectOnline(resume=false){
+ if(socket){socket.onclose=null;socket.close();socket=null}
+ if(!resume){cancelRecovery();roomId=null;clientId=null;roomState=null;sessionToken=null}
+ const url=networkURL();if(!/^wss?:\/\//i.test(url)){if(resume)retryRecovery();else notice('서버 주소는 ws:// 또는 wss:// 로 시작해야 합니다.');return}
+ setConnectionStatus(resume?'서버 재연결 중...':'서버 연결 중...');
+ if(!resume){notice('');el('publicRooms').innerHTML='<p class="room-empty">공개방 목록 불러오는 중...</p>'}
+ let ws;
+ try{ws=new WebSocket(url);socket=ws}catch{setConnectionStatus('주소 오류');if(resume)retryRecovery();else notice('서버 주소가 잘못됐습니다.');return}
+ ws.onopen=()=>{if(socket!==ws)return;setConnectionStatus(resume?'방 복구 중...':'서버 연결됨 · 공개방 검색 가능',true);notice('');
+  requestClockProbe(true);if(resume&&sessionToken&&roomId)sendOnline({type:'resume',token:sessionToken});else sendOnline({type:'list'});
+ };
+ ws.onmessage=e=>{if(socket!==ws)return;try{handleOnlineMessage(JSON.parse(e.data))}catch(err){console.error('online message',err)}};
+ ws.onclose=()=>{if(socket!==ws)return;socket=null;setConnectionStatus('서버 연결 끊김');
+  if((resume||roomId)&&sessionToken){beginRecovery();return}
+  notice('서버 연결이 끊겼습니다. 서버 실행 및 네트워크를 확인하세요.');
+  if(isMultiplayer){multiDisconnected();return}
+  if(!el('roomScreen').hidden){roomId=null;showOnly('onlineScreen')}
+  el('publicRooms').innerHTML='<p class="room-empty">연결이 끊겼습니다. 다시 서버 연결을 눌러 주세요.</p>';
+ };
+ ws.onerror=()=>{setConnectionStatus('연결 확인 중...');if(!resume)notice('서버 연결 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.')};
+}
+function showOnline(){isMultiplayer=false;showOnly('onlineScreen');mode='lobby';if(socket?.readyState===WebSocket.OPEN){sendOnline({type:'list'});return}connectOnline()}
+function displayRooms(rooms){const container=el('publicRooms');container.replaceChildren();if(!rooms.length){const p=document.createElement('p');p.className='room-empty';p.textContent='아직 열린 공개방이 없습니다. 오른쪽에서 첫 방을 만들어보세요!';container.append(p);return}
+ for(const room of rooms){const btn=document.createElement('button');btn.type='button';btn.className='room-entry';btn.disabled=room.count>=2||room.state!=='waiting';
+  const left=document.createElement('div'),name=document.createElement('strong'),detail=document.createElement('small'),right=document.createElement('span');
+  name.textContent=room.name;detail.textContent=(room.stage==='time'?'타임 어택 · 18칸':'최고 높이 · 55블록')+' · '+room.count+'/2명';right.className='room-tag';right.textContent=room.count>=2?'인원 마감':'참가하기';
+  left.append(name,detail);btn.append(left,right);btn.onclick=()=>{rememberNick();sendOnline({type:'join',roomId:room.id,nickname:getNick()})};container.append(btn)}
+}
+function getNick(){return (el('nickname').value.trim()||'플레이어').slice(0,12)}
+function rememberNick(){try{localStorage.setItem('tricky_player_nick',getNick())}catch{}}
+function renderWaitingRoom(){if(!roomState)return;el('waitingTitle').textContent=roomState.name;el('roomModeInfo').textContent=roomState.stage==='time'?'스테이지 2 · 무제한 18칸 타임 어택':'스테이지 1 · 55블록 최고 높이';
+ const list=el('roomPlayers');list.replaceChildren();roomState.players.forEach((player,i)=>{const div=document.createElement('div');div.className='room-person';const av=document.createElement('div');av.className='avatar';av.textContent=i?'🔷':'🔶';const who=document.createElement('div'),name=document.createElement('strong'),state=document.createElement('small');name.textContent=player.nickname+(player.id===clientId?' (나)':'');state.textContent=player.ready?'✔ 준비 완료':'대기 중';state.className=player.ready?'ready':'';if(player.connected===false){state.textContent='연결 복구 대기 중';state.className=''}who.append(name,state);div.append(av,who);list.append(div)});
+ if(roomState.players.length<2){const div=document.createElement('div');div.className='room-person';div.textContent='👤 상대 플레이어를 기다리는 중...';list.append(div)}
+ ready=Boolean(roomState.players.find(p=>p.id===clientId)?.ready);el('readyBtn').textContent=ready?'✓ 준비 취소':'✓ 준비하기';el('waitingNote').textContent=roomState.players.length===2?'둘 다 준비하면 3초 후 시작!':'친구가 이 서버의 공개방 목록에서 들어오면 함께 시작할 수 있어요.';
+}
+function handleOnlineMessage(m){switch(m.type){
+ case 'hello':if(!reconnecting)clientId=m.id;break;
+ case 'clock_sync':updateClockEstimate(m);break;
+ case 'rooms':displayRooms(m.rooms||[]);break;
+ case 'joined':roomId=m.roomId;clientId=m.clientId||clientId;sessionToken=m.resumeToken||null;roomState=m.room;isMultiplayer=false;mode='lobby';showOnly('roomScreen');renderWaitingRoom();break;
+ case 'resumed':{
+  const previous=reconnectPrevMode;cancelRecovery();
+  sessionToken=m.resumeToken||sessionToken;roomId=m.roomId;clientId=m.clientId;roomState=m.room;
+  serverRoundStartAt=m.startAt||serverRoundStartAt;remoteFrames=[];snapshotArrivalTimes.length=0;lastSnapshotAt=0;requestClockProbe(true);setConnectionStatus('재접속 성공 · 서버 연결됨',true);
+  if(m.state==='playing'||m.state==='countdown'){
+   isMultiplayer=true;multiplayerControls(true);stage=m.stage;
+   el('gameScreen').classList.add('multi');el('opponentStage').hidden=false;showOnly('gameScreen');
+   if(previous==='multi_wait'){mode='multi_wait';showOverlay('기록 제출 완료!','상대 결과를 기다리고 있습니다.','대기 중','⚔️',()=>{});el('overlayBtn').disabled=true}
+   else if(previous==='countdown'&&m.state==='countdown'){mode='countdown'}
+   else{mode='playing';resumeClock();hideOverlay();el('overlayBtn').disabled=false;if(!piece&&previous==='countdown')spawnPiece()}
+  }else if(m.state==='finished'){
+   if(m.matchResult&&isMultiplayer)showMultiplayerResult(m.matchResult);
+   else{isMultiplayer=false;mode='lobby';showOnly('roomScreen');renderWaitingRoom()}
+  }else{isMultiplayer=false;mode='lobby';showOnly('roomScreen');renderWaitingRoom()}
+  break;
+ }
+ case 'resume_failed':recoveryFailed();break;
+ case 'server_restarting':setConnectionStatus('서버 업데이트 중...');break;
+ case 'room':roomState=m.room;if(roomId===m.room?.id){if(!isMultiplayer){showOnly('roomScreen');renderWaitingRoom()}}break;
+ case 'match_start':roomState=m.room;isMultiplayer=true;multiplayerControls(true);roomId=m.roomId;serverRoundStartAt=m.startAt;requestClockProbe(true);stage=m.stage;multiFinished=false;remoteSnapshot=null;remoteFrames=[];snapshotArrivalTimes.length=0;lastSnapshotAt=0;remoteStatusText='대결 시작 대기 중';
+  el('opponentStatus').textContent=remoteStatusText;el('opponentStage').hidden=false;el('gameScreen').classList.add('multi');
+  el('stageName').textContent=stage==='height'?'PVP · 55 BLOCKS':'PVP · TIME ATTACK';el('stageBadge').textContent='MY TOWER · 8 BLOCK PLATFORM';
+  showOnly('gameScreen');clearState();mode='countdown';showOverlay('3초 후 시작','상대와 동시에 시작합니다. 각자 자기 탑만 조작할 수 있어요.','대기 중...','⚔️',()=>{});el('overlayBtn').disabled=true;break;
+ case 'snapshot':if(m.from!==clientId){remoteSnapshot=m.data;lastSnapshotAt=performance.now();remoteFrames.push({at:lastSnapshotAt,data:m.data});snapshotArrivalTimes.push(lastSnapshotAt);if(remoteFrames.length>9)remoteFrames.shift();remoteStatusText=m.nickname+' · '+(m.data?.height||0)+'칸 · '+(m.data?.placed||0)+'개 배치';el('opponentStatus').textContent=remoteStatusText}break;
+ case 'player_finished':if(m.playerId!==clientId){remoteStatusText=m.nickname+' · 먼저 완주! 내 기록을 계속 쌓으세요.';el('opponentStatus').textContent=remoteStatusText}break;
+ case 'match_result':showMultiplayerResult(m);break;
+ case 'opponent_left':if(isMultiplayer){showMultiplayerResult({winner:clientId,reason:'상대 플레이어가 연결을 종료했습니다.',results:m.results||[]})}else{el('waitingNote').textContent='상대가 나갔습니다. 다른 플레이어를 기다립니다.'}break;
+ case 'left':roomId=null;roomState=null;sessionToken=null;cancelRecovery();isMultiplayer=false;showOnline();break;
+ case 'error':notice(m.message||'서버 오류');if(!el('roomScreen').hidden)el('waitingNote').textContent=m.message||'서버 오류';break;
+ }}
+function refreshCountdown(){const rest=serverRoundStartAt-serverNowEstimate();if(rest>0){el('overlayTitle').textContent='시작까지 '+Math.ceil(rest/1000);return}
+ resetClock();mode='playing';resumeClock();hideOverlay();el('overlayBtn').disabled=false;spawnPiece();sendGameSnapshot(true)}
+function finishMultiplayer(win){if(multiFinished)return;multiFinished=true;stopClock();mode='multi_wait';keys.clear();touchSoft=false;piece=null;updateUI();
+ showOverlay(stage==='height'?'기록 제출 완료!':'목표 높이 달성!','상대와 경기 결과를 비교하고 있습니다.','대결 중','⚔️',()=>{});el('overlayBtn').disabled=true;
+ sendOnline({type:'finish',height,placed,elapsed:gameTime,win});sendGameSnapshot(true)}
+function escapeHTML(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function showMultiplayerResult(m){if(!isMultiplayer)return;stopClock();mode='multi_result';multiFinished=true;keys.clear();touchSoft=false;piece=null;
+ const win=m.winner===clientId,draw=m.winner==null,title=draw?'무승부':win?'승리!':'패배';
+ const resultKind=draw?'draw':win?'win':'loss';
+ const results=(m.results||[]).slice(0,2),my=results.find(p=>p.id===clientId),rival=results.find(p=>p.id!==clientId);
+ const card=(p,label)=>{if(!p)return `<div class="duel-row"><small>${label}</small><strong>기록 없음</strong></div>`;
+  const value=stage==='time'?formatPrecise(p.elapsed||0):`${p.height||0}칸`;
+  const detail=stage==='time'?`${p.height||0}칸 도달`:`${p.placed||0}개 사용`;
+  return `<div class="duel-row${p.id===m.winner?' is-winner':''}"><small>${label}</small><b>${escapeHTML(p.nickname)}</b><strong>${value}</strong><small>${detail}</small></div>`;
+ };
+ const scorecards=`<div class="versus-summary">${card(my,'MY TOWER')}<div class="versus-vs">VS</div>${card(rival,'RIVAL TOWER')}</div>`;
+ const message=`${escapeHTML(m.reason||'대결 종료')}${scorecards}<span class="em">${draw?'서로 멋진 대결이었어요!':win?'탑의 승자가 결정됐어요!':'다음 도전을 준비해 보세요!'}</span>`;
+ showOverlay(title,message,'공개방으로 돌아가기',draw?'🤝':win?'🏆':'🎯',()=>leaveMultiplayer());decorateResult(resultKind);
+ el('overlayBtn').disabled=false;updateUI();if(win){tone(740,.16);setTimeout(()=>{if(mode==='multi_result')tone(980,.21)},145)}
+}
+function multiDisconnected(){if(isMultiplayer){mode='multi_result';stopClock();isMultiplayer=false;showOverlay('네트워크 연결 종료','서버에 연결할 수 없어 경기가 중단됐습니다.','모드 선택','📡',showEntry);el('overlayBtn').disabled=false}}
+function leaveMultiplayer(goOnline=true){multiplayerControls(false);if(roomId&&socket?.readyState===WebSocket.OPEN)socket.send(JSON.stringify({type:'leave'}));cancelRecovery();roomId=null;roomState=null;sessionToken=null;isMultiplayer=false;multiFinished=false;remoteSnapshot=null;remoteFrames=[];lastSnapshotAt=0;stopClock();mode='lobby';keys.clear();touchSoft=false;piece=null;spawnWait=-1;
+ el('opponentStage').hidden=true;el('gameScreen').classList.remove('multi');el('overlayBtn').disabled=false;hideOverlay();if(goOnline)showOnline()}
+function sendGameSnapshot(force){if(!isMultiplayer||!roomId||socket?.readyState!==WebSocket.OPEN||!['playing','multi_wait','countdown'].includes(mode))return;
+ const now=performance.now();if(!force&&now-lastPublishedAt<SNAPSHOT_INTERVAL_MS-1)return;lastPublishedAt=now;
+ const data={height,placed,falls,time:Math.round(gameTime*100)/100,cameraY:Math.round(cameraY),
+  bodies:bodies.slice(-90).map(b=>[b.name,Math.round(b.x*10)/10,Math.round(b.y*10)/10,Math.round(b.a*1000)/1000,b.id]),
+  piece:piece?[piece.name,Math.round(piece.x*10)/10,Math.round(piece.y*10)/10,Math.round(piece.a*1000)/1000,piece.id]:null};
+ sendOnline({type:'snapshot',data});}
+function remoteBlock(c,v,alpha=1){if(!Array.isArray(v)||v.length<4)return;const shape=SHAPES.find(s=>s.name===v[0]);if(!shape)return;
+ const meanX=shape.cells.reduce((t,r)=>t+r[0]+.5,0)/4,meanY=shape.cells.reduce((t,r)=>t+r[1]+.5,0)/4;
+ c.save();c.globalAlpha=alpha;c.translate(v[1],v[2]);c.rotate(v[3]);for(const r of shape.cells)tile(c,(r[0]-meanX)*CELL,(r[1]-meanY)*CELL,CELL,shape.color);c.restore()}
+function interpolateSnapshot(){if(!remoteFrames.length)return remoteSnapshot;
+ const target=performance.now()-115;
+ let before=remoteFrames[0],after=remoteFrames[remoteFrames.length-1];
+ for(let i=0;i<remoteFrames.length-1;i++)if(remoteFrames[i].at<=target&&remoteFrames[i+1].at>=target){before=remoteFrames[i];after=remoteFrames[i+1];break}
+ if(target<=remoteFrames[0].at){before=after=remoteFrames[0]}
+ else if(target>=remoteFrames[remoteFrames.length-1].at){before=after=remoteFrames[remoteFrames.length-1]}
+ const t=before===after?1:Math.max(0,Math.min(1,(target-before.at)/(after.at-before.at)));
+ const x=before.data,y=after.data,byId=new Map();
+ for(let i=0;i<(x.bodies||[]).length;i++){const b=x.bodies[i];byId.set(b[4]??`legacy-${i}`,b)}
+ const lerp=(a,b)=>a+(b-a)*t;
+ const blend=(b,a)=>{if(!a||a[0]!==b[0])return b;let delta=b[3]-a[3];delta=Math.atan2(Math.sin(delta),Math.cos(delta));return [b[0],lerp(a[1],b[1]),lerp(a[2],b[2]),a[3]+delta*t,b[4]]};
+ const bs=(y.bodies||[]).map((b,i)=>blend(b,byId.get(b[4]??`legacy-${i}`)));
+ let p=y.piece;if(x.piece&&p&&x.piece[4]===p[4])p=blend(p,x.piece);
+ return {height:y.height,placed:y.placed,falls:y.falls,time:lerp(x.time||0,y.time||0),cameraY:lerp(x.cameraY||0,y.cameraY||0),bodies:bs,piece:p};
+}
+function renderOpponent(){if(!isMultiplayer)return;
+ const c=remoteCtx,r=interpolateSnapshot(),now=performance.now(),lagging=!lastSnapshotAt||now-lastSnapshotAt>1500;
+ const live=el('remoteLive');live.classList.toggle('lagging',lagging);live.textContent=lagging?'SIGNAL WAIT':'LIVE';
+ c.drawImage(remoteBackdrop,0,0);
+ c.save();c.translate(0,Number(r?.cameraY)||0);
+ if(stage==='time'){const y=GROUND-GOAL*CELL;c.save();c.setLineDash([8,7]);c.strokeStyle='#ffdb92';c.lineWidth=1.5;c.beginPath();c.moveTo(55,y);c.lineTo(425,y);c.stroke();c.restore();c.font='800 11px system-ui';c.fillStyle='#ffe7a3';c.textAlign='right';c.fillText('GOAL 18',425,y-8)}
+ c.fillStyle='#080f23e0';c.fillRect(0,GROUND,PLAT_L,H);c.fillRect(PLAT_R,GROUND,W-PLAT_R,H);drawPlatformTiles(c);
+ if(r){for(const b of r.bodies||[])remoteBlock(c,b);if(r.piece)remoteBlock(c,r.piece)}
+ c.restore();
+ c.fillStyle='#d9e7ff';c.textAlign='left';c.font='900 14px system-ui';c.fillText('RIVAL TOWER',16,26);
+ c.fillStyle='#fdd790';c.textAlign='right';c.font='900 16px system-ui';c.fillText((r?.height??0)+'칸',465,27);
+ c.fillStyle='#b5caeb';c.font='700 12px system-ui';c.fillText('블록 '+(r?.placed??0)+(stage==='time'?' · '+formatPrecise(r?.time||0):' / 55'),464,48);
+ if(!r){c.textAlign='center';c.fillStyle='#cbd8ed';c.font='700 17px system-ui';c.fillText('상대 플레이어 화면 연결 중…',W/2,254)}
+ else if(lagging){c.fillStyle='#081a32ae';c.fillRect(74,110,332,65);c.textAlign='center';c.font='800 16px system-ui';c.fillStyle='#ffd090';c.fillText('상대 화면 동기화 대기 중',W/2,150)}
+}
+el('quickStage1').onclick=()=>{showSingleLobby();selectStage('height')};
+el('quickStage2').onclick=()=>{showSingleLobby();selectStage('time')};
+el('quickMulti1').onclick=()=>{el('matchStage').value='height';showOnline()};
+el('quickMulti2').onclick=()=>{el('matchStage').value='time';showOnline()};
+el('chooseSingle').onclick=showSingleLobby;el('chooseMulti').onclick=showOnline;el('singleBack').onclick=showEntry;
+el('onlineBack').onclick=()=>{cancelRecovery();if(socket){socket.onclose=null;socket.close();socket=null}showEntry()};
+el('connectServer').onclick=connectOnline;el('refreshRooms').onclick=()=>sendOnline({type:'list'});
+el('createRoom').onclick=()=>{rememberNick();sendOnline({type:'create',nickname:getNick(),name:el('roomTitle').value.trim(),stage:el('matchStage').value})};
+el('leaveRoom').onclick=()=>{sendOnline({type:'leave'});roomId=null;sessionToken=null;cancelRecovery();showOnline()};
+el('readyBtn').onclick=()=>{if(roomId)sendOnline({type:'ready',ready:!ready})};
+try{el('nickname').value=localStorage.getItem('tricky_player_nick')||''}catch{}
+
+clearState();refreshLobbyRecords();showEntry();
+// A stable 60fps render budget: 120/144Hz monitors do not waste CPU redrawing at
+// native refresh rate. Physics accumulates real frame time; online clocks use server time.
+const FRAME_BUDGET_MS=1000/60;
+let nextFrameDue=0,lastPaintAt=0;
+function frame(ts){
+ requestAnimationFrame(frame);
+ if(!nextFrameDue)nextFrameDue=ts;
+ if(ts+1<nextFrameDue)return;
+ nextFrameDue+=FRAME_BUDGET_MS;
+ if(ts-nextFrameDue>FRAME_BUDGET_MS*3)nextFrameDue=ts+FRAME_BUDGET_MS;
+ const dt=lastPaintAt?Math.max(0,Math.min((ts-lastPaintAt)/1000,.047)):FRAME_BUDGET_MS/1000;
+ lastPaintAt=ts;
+ if(isMultiplayer&&mode==='countdown')refreshCountdown();
+ if(mode==='playing')syncClock();
+ update(dt);
+ if(stage==='time'&&mode==='playing')el('score').textContent=formatPrecise(gameTime);
+ render(dt);
+ if(isMultiplayer){sendGameSnapshot(false);renderOpponent();updatePerformanceHud(ts)}
+}
+requestAnimationFrame(frame);
+// Restricted to local development diagnostics, never alters gameplay state.
+window.__trickyDebug=()=>({mode,stage,platformBlocks:PLATFORM_BLOCKS,platformWidth:PLAT_R-PLAT_L,cell:CELL,isMultiplayer,bodies:bodies.map(b=>({x:b.x,y:b.y,angle:b.a,vx:b.vx,vy:b.vy,omega:b.omega,sleep:b.sleep,supported:b.supported,age:b.age})),active:piece?{x:piece.x,y:piece.y}:null,placed,remaining:Math.max(0,HEIGHT_BLOCKS-placed),falls,height,peakHeight,balance,score,gameTime,cameraY,finishWait,spawnWait,spawnDelay:SPAWN_DELAY,bestHeight,bestTime,renderFps:displayedFps,receivedHz:snapshotArrivalTimes.filter(x=>performance.now()-x<1000).length,rttMs:clockRttMs,clockOffsetMs,serverClockElapsed:isMultiplayer&&serverRoundStartAt?(serverNowEstimate()-serverRoundStartAt)/1000:null,remoteFrameCount:remoteFrames.length,remoteHeight:remoteSnapshot?.height??null,remoteLastSeen:lastSnapshotAt?performance.now()-lastSnapshotAt:null,roomId,clientId,socketState:socket?.readyState??null});
+})();
+</script>
+</body>
+</html>
